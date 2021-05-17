@@ -10,6 +10,7 @@ import click
 from pylint.reporters import CollectingReporter  # type: ignore
 from simple_chalk import chalk  # type: ignore
 
+
 @dataclasses.dataclass
 class Message:
     path: str
@@ -97,7 +98,7 @@ def run(directory: str, outputFilename: str, outputFormat: str) -> None:
         subprocess.check_output(f'mypy {targetDirectory} --config-file {currentDirectory}/mypy.ini --no-color-output --no-error-summary --show-column-numbers', stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
-    output = reporter.create_output(messages=messages)
+    output = reporter.create_output(messages=messages)  # type: ignore
     if outputFilename:
         with open(outputFilename, 'w') as outputFile:
             outputFile.write(output)

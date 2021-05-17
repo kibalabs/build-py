@@ -3,9 +3,9 @@ import json
 from collections import defaultdict
 
 import click
-from pylint.lint import Run as run_pylint
-from pylint.reporters import CollectingReporter
-from simple_chalk import chalk
+from pylint.lint import Run as run_pylint  # type: ignore
+from pylint.reporters import CollectingReporter  # type: ignore
+from simple_chalk import chalk  # type: ignore
 
 class GitHubAnnotationsReporter(CollectingReporter):
 
@@ -71,7 +71,7 @@ def run(directory: str, outputFilename: str, outputFormat: str) -> None:
     targetDirectory = os.path.abspath(directory or os.getcwd())
     reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
     run_pylint([f'--rcfile={currentDirectory}/pylintrc', targetDirectory], reporter=reporter, exit=False)
-    output = reporter.create_output()
+    output = reporter.create_output()  # type: ignore
     if outputFilename:
         with open(outputFilename, 'w') as outputFile:
             outputFile.write(output)
