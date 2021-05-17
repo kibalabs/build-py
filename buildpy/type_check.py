@@ -7,8 +7,8 @@ from collections import defaultdict
 from typing import List
 
 import click
-from pylint.reporters import CollectingReporter
-from simple_chalk import chalk
+from pylint.reporters import CollectingReporter  # type: ignore
+from simple_chalk import chalk  # type: ignore
 
 @dataclasses.dataclass
 class Message:
