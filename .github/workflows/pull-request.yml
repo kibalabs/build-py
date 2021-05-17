@@ -20,10 +20,9 @@ jobs:
       uses: kibalabs/github-action-create-annotations@main
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        json-file-path: ./src/linting-results.json
+        json-file-path: ./linting-results.json
         check-name: lint-build-package
         fail-on-error: false
-        path-prefix: ./src/
     - name: Run typing
       run: |
         docker run --name typing-build $DOCKER_IMAGE python buildpy/type_check.py --directory buildpy --output-file typing-results.json --output-format annotations
@@ -32,7 +31,6 @@ jobs:
       uses: kibalabs/github-action-create-annotations@main
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        json-file-path: ./src/typing-results.json
+        json-file-path: ./typing-results.json
         check-name: type-build-package
         fail-on-error: false
-        path-prefix: ./src/
