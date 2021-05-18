@@ -20,12 +20,14 @@ setup(
     install_requires=requirements,
     tests_require=[],
     package_data={
-        'core': [
+        'buildpy': [
             'py.typed',
+            'pylintrc',
+            'mypy.ini',
         ]
     },
-    test_suite='tests',
     include_package_data=True,
+    test_suite='tests',
     extras_require={
     },
     entry_points='''
