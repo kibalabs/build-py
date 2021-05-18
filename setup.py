@@ -28,4 +28,9 @@ setup(
     include_package_data=True,
     extras_require={
     },
+    entry_points='''
+        [console_scripts]
+        lint=buildpy.lint:run
+        type-check=buildpy.type_check:run
+    ''',
 )
