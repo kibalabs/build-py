@@ -13,10 +13,10 @@ jobs:
     steps:
     - name: Check out the repo
       uses: actions/checkout@v2
-    - name: Get package version
-      id: package_version
-      run: if [ "${{ github.ref }}" != $(python3 setup.py --version)]; then exit 1; fi
-    # TODO(krishan711): check the version is the same as the tag
+    - name: Check the package version is the same as the tag
+      run: |
+        version=$(python3 setup.py --version)
+        if [ "${{ github.ref }}" != "v${version}"]; then exit 1; fi
     - name: Build docker image
       run: docker build --tag $DOCKER_IMAGE .
     - name: Create .pypirc file
