@@ -16,7 +16,10 @@ jobs:
     - name: Check the package version is the same as the tag
       run: |
         version=$(python3 setup.py --version)
-        if [ "${{ github.ref }}" != "v${version}" ]; then exit 1; fi
+        if [ "${{ github.ref }}" != "v${version}" ]; then
+          echo "version in setup.py (${version}) is different to the given tag (${{ github.ref }})"
+          exit 1;
+        fi
     - name: Build docker image
       run: docker build --tag $DOCKER_IMAGE .
     - name: Create .pypirc file
