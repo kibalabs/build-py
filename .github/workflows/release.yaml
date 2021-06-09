@@ -14,7 +14,7 @@ jobs:
     - name: Check the package version is the same as the tag
       run: |
         version=$(python3 setup.py --version)
-        if [ "${{ github.ref }}" != "v${version}" ]; then
+        if [ "${{ github.ref }}" != "refs/tags/v${version}" ]; then
           echo "version in setup.py (v${version}) is different to the given tag (${{ github.ref }})"
           exit 1;
         fi
