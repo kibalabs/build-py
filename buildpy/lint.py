@@ -66,11 +66,13 @@ class PrettyReporter(CollectingReporter):
 @click.option('-d', '--directory', 'directory', required=False, type=str)
 @click.option('-o', '--output-file', 'outputFilename', required=False, type=str)
 @click.option('-f', '--output-format', 'outputFormat', required=False, type=str, default='pretty')
-def run(directory: str, outputFilename: str, outputFormat: str) -> None:
+@click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
+def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
     targetDirectory = os.path.abspath(directory or os.getcwd())
     reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
-    run_pylint([f'--rcfile={currentDirectory}/pylintrc', targetDirectory], reporter=reporter, exit=False)
+    pylintConfigFilePath = configFilePath or f'{currentDirectory}/pylintrc'
+    run_pylint([f'--rcfile={pylintConfigFilePath}', targetDirectory], reporter=reporter, exit=False)
     output = reporter.create_output()  # type: ignore
     if outputFilename:
         with open(outputFilename, 'w') as outputFile:
