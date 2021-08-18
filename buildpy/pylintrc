@@ -3,7 +3,7 @@
 # http://pylint.pycqa.org/en/latest/technical_reference/features.html
 
 # pydantic: https://github.com/samuelcolvin/pydantic/issues/1961
-extension-pkg-whitelist=pydantic
+extension-pkg-whitelist=pydantic,math
 
 [MESSAGES]
 disable=suppressed-message,
@@ -17,8 +17,8 @@ disable=suppressed-message,
         consider-iterating-dictionary,
         logging-fstring-interpolation,
         duplicate-code,
-        # Below should be fixed in pylint 2.7.0(-ish) https://github.com/PyCQA/pylint/issues/3882
-        unsubscriptable-object,
+        f-string-without-interpolation,
+        raise-missing-from,
 
 [REPORTS]
 reports=no
