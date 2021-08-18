@@ -1,6 +1,6 @@
-click==7.1.2
-simple_chalk==0.1.0
-pylint==2.6.2
-mypy==0.812
-twine==3.4.1
-wheel==0.36.2
+click~=7.1.2
+simple_chalk~=0.1.0
+pylint~=2.9.6
+mypy~=0.910
+twine~=3.4.2
+wheel~=0.37.0
