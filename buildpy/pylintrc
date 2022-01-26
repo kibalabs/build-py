@@ -20,6 +20,8 @@ disable=suppressed-message,
         f-string-without-interpolation,
         raise-missing-from,
 
+enable=useless-suppression,
+
 [REPORTS]
 reports=no
 score=no
