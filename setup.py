@@ -34,5 +34,6 @@ setup(
         [console_scripts]
         lint=buildpy.lint:run
         type-check=buildpy.type_check:run
+        version=buildpy.version:run
     ''',
 )
