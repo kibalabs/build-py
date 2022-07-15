@@ -45,10 +45,10 @@ argument-rgx=[a-z][a-zA-Z0-9]{1,30}$
 argument-name-hint=[a-z][a-zA-Z0-9]{1,30}$
 inlinevar-rgx=[a-z_][A-Za-z0-9]*$
 inlinevar-name-hint=[a-z_][A-Za-z0-9]*$
-method-rgx=[a-z_][a-z0-9_]{2,50}$
-method-name-hint=[a-z_][a-z0-9_]{2,50}$
-function-rgx=[a-z_][a-z0-9_]{2,50}$
-function-name-hint=[a-z_][a-z0-9_]{2,50}$
+method-rgx=[a-z_][a-z0-9_]{2,60}$
+method-name-hint=[a-z_][a-z0-9_]{2,60}$
+function-rgx=[a-z_][a-z0-9_]{2,60}$
+function-name-hint=[a-z_][a-z0-9_]{2,60}$
 no-docstring-rgx=.*
 docstring-min-length=0
 
