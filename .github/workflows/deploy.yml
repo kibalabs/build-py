@@ -21,8 +21,6 @@ jobs:
         run: echo ::set-output name=commit_count::$(git rev-list $(git describe --tags --abbrev=0)..HEAD --count)
       - name: Create .pypirc file
         run: echo -e "[pypi]\nusername=__token__\npassword=$PYPI_TOKEN" > .pypirc
-      # - name: Publish next package to npm
-      #   run: docker run -v $(pwd)/.npmrc:/root/.npmrc package /bin/bash -c "npm run publish-next -- --next-version ${{ steps.vars.outputs.commit_count }}"
       - name: Publish next package to pypi
         if: steps.vars.outputs.commit_count != '0'
         run: |
