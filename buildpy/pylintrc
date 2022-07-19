@@ -28,6 +28,7 @@ score=no
 
 [BASIC]
 good-names=_
+variable-naming-style=camelCase
 include-naming-hint=yes
 class-attribute-rgx=([a-z_][A-Za-z0-9]{1,30}|[A-Z_][A-Z0-9_]{1,30}|(__.*__))$
 variable-rgx=[a-z][a-zA-Z0-9]{1,50}$
