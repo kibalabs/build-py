@@ -1,12 +1,9 @@
-import json
 import os
-from collections import defaultdict
 from typing import List
 
 import click
 from pylint.lint import Run as run_pylint  # type: ignore
 from pylint.reporters import CollectingReporter  # type: ignore
-from simple_chalk import chalk  # type: ignore
 
 from buildpy.util import GitHubAnnotationsReporter
 from buildpy.util import Message
