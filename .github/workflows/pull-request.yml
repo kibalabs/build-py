@@ -32,7 +32,7 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         json-file-path: ./type-check-results.json
-        check-name: type-package
+        check-name: type-check-package
         fail-on-error: false
     - name: Run security-check
       run: |
@@ -42,6 +42,6 @@ jobs:
       uses: kibalabs/github-action-create-annotations@main
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        json-file-path: ./security-results.json
-        check-name: security-package
+        json-file-path: ./security-check-results.json
+        check-name: security-check-package
         fail-on-error: false

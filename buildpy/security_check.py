@@ -99,8 +99,8 @@ class BanditMessageParser(MessageParser):
             banditLevel = rawMessageParts[5].lower()
             output.append(Message(
                 path=rawMessageParts[0],
-                line=rawMessageParts[1],
-                column=rawMessageParts[2],
+                line=int(rawMessageParts[1]),
+                column=int(rawMessageParts[2]),
                 code=BANDIT_CODES[rawMessageParts[3]],
                 text=rawMessageParts[4],
                 level='notice' if banditLevel == 'low' else ('warning' if banditLevel == 'warning' else 'error'),
