@@ -89,13 +89,15 @@ class PrettyReporter(KibaReporter):
 @click.option('-d', '--directory', 'directory', required=False, type=str)
 @click.option('-o', '--output-file', 'outputFilename', required=False, type=str)
 @click.option('-f', '--output-format', 'outputFormat', required=False, type=str, default='pretty')
-def run(directory: str, outputFilename: str, outputFormat: str) -> None:
+@click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
+def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
     targetDirectory = os.path.abspath(directory or os.getcwd())
     reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
     messages = []
+    mypyConfigFilePath = configFilePath or f'{currentDirectory}/mypy.ini'
     try:
-        subprocess.check_output(f'mypy {targetDirectory} --config-file {currentDirectory}/mypy.ini --no-color-output --no-error-summary --show-column-numbers', stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output(f'mypy {targetDirectory} --config-file {mypyConfigFilePath} --no-color-output --no-error-summary --show-column-numbers', stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
     output = reporter.create_output(messages=messages)  # type: ignore
