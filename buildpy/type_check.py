@@ -1,87 +1,33 @@
-import re
 import os
-import json
-import dataclasses
+import re
 import subprocess
-from collections import defaultdict
 from typing import List
 
 import click
-from pylint.reporters import CollectingReporter  # type: ignore
-from simple_chalk import chalk  # type: ignore
+
+from buildpy.util import GitHubAnnotationsReporter
+from buildpy.util import Message
+from buildpy.util import MessageParser
+from buildpy.util import PrettyReporter
 
 
-@dataclasses.dataclass
-class Message:
-    path: str
-    line: int
-    column: int
-    code: str
-    message: str
-    level: str
+class MypyMessageParser(MessageParser):
 
-class KibaReporter(CollectingReporter):
-
-    @staticmethod
-    def parse_message(rawMessage: str) -> Message:
-        match = re.match(r'(.*):(\d*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
-        if match:
-            return Message(path=match.group(1), line=int(match.group(2)), column=int(match.group(3)), code=match.group(6), message=match.group(5).strip(), level=match.group(4))
-        return Message(path='', line=0, column=0, code='unparsed', message=rawMessage.strip(), level='error')
-
-class GitHubAnnotationsReporter(KibaReporter):
-
-    def create_output(self, messages: List[str]) -> str:
-        annotations = []
-        parsedMessages = [self.parse_message(rawMessage=rawMessage) for rawMessage in messages if rawMessage]
-        for message in parsedMessages:
-            annotation = {
-                'path': os.path.relpath(message.path) if message.path else '<unknown>',
-                'start_line': message.line,
-                'end_line': message.line,
-                'start_column': message.column,
-                'end_column': message.column,
-                'message': f'[{message.code}] {message.message}',
-                'annotation_level': 'note' if message.level == 'note' else ('warning' if message.level == 'warning' else 'failure'),
-            }
-            annotations.append(annotation)
-        return json.dumps(annotations)
-
-
-class PrettyReporter(KibaReporter):
-
-    @staticmethod
-    def get_summary(errorCount: int, warningCount: int) -> str:
-        summary = ''
-        if errorCount:
-            summary += chalk.red(f'{errorCount} errors')
-        if warningCount:
-            summary = f'{summary} and ' if summary else ''
-            summary += chalk.yellow(f'{warningCount} warnings')
-        return summary
-
-    def create_output(self, messages: List[str]) -> str:
-        parsedMessages = [self.parse_message(rawMessage=rawMessage) for rawMessage in messages if rawMessage]
-        fileMessageMap = defaultdict(list)
-        for message in parsedMessages:
-            fileMessageMap[os.path.relpath(message.path) if message.path else '<unknown>'].append(message)
-        totalErrorCount = 0
-        totalWarningCount = 0
-        outputs = []
-        for (filePath, parsedMessages) in fileMessageMap.items():
-            fileOutputs = []
-            for message in parsedMessages:
-                location = chalk.grey(f'{filePath}:{message.line}:{message.column}')
-                color = chalk.yellow if message.level == 'warning' else chalk.red
-                fileOutputs.append(f'{location} [{color(message.code)}] {message.message}')
-            errorCount = sum(1 for message in parsedMessages if message.level != 'warning')
-            totalErrorCount += errorCount
-            warningCount = sum(1 for message in parsedMessages if message.level == 'warning')
-            totalWarningCount += warningCount
-            fileOutputString = '\n'.join(fileOutputs)
-            outputs.append(f'{self.get_summary(errorCount, warningCount)} in {filePath}\n{fileOutputString}\n')
-        output = '\n'.join(outputs)
-        output += f'\nFailed due to {self.get_summary(totalErrorCount, totalWarningCount)}.' if (totalErrorCount or totalWarningCount) else chalk.green('Passed.')
+    def parse_messages(self, rawMessages: List[str]) -> List[Message]:
+        output: List[Message] = []
+        for rawMessage in rawMessages:
+            rawMessage = rawMessage.strip()
+            if len(rawMessage) == 0:
+                continue
+            match = re.match(r'(.*):(\d*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
+            output.append(Message(
+                path=match.group(1) if match else '',
+                line=int(match.group(2)) if match else 0,
+                column=int(match.group(3)) if match else 0,
+                code=match.group(6) if match else 'unparsed',
+                text=match.group(5).strip() if match else rawMessage.strip(),
+                level=match.group(4) if match else 'error',
+            ))
         return output
 
 
@@ -93,14 +39,16 @@ class PrettyReporter(KibaReporter):
 def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
     targetDirectory = os.path.abspath(directory or os.getcwd())
-    reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
     messages = []
     mypyConfigFilePath = configFilePath or f'{currentDirectory}/mypy.ini'
     try:
-        subprocess.check_output(f'mypy {targetDirectory} --config-file {mypyConfigFilePath} --no-color-output --no-error-summary --show-column-numbers', stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output(f'mypy {targetDirectory} --config-file {mypyConfigFilePath} --no-color-output --no-error-summary --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
-    output = reporter.create_output(messages=messages)  # type: ignore
+    messageParser = MypyMessageParser()
+    parsedMessages = messageParser.parse_messages(rawMessages=messages)
+    reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
+    output = reporter.create_output(messages=parsedMessages)
     if outputFilename:
         with open(outputFilename, 'w') as outputFile:
             outputFile.write(output)

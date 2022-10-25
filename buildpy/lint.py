@@ -1,64 +1,41 @@
 import os
-import json
-from collections import defaultdict
+from typing import List
 
 import click
 from pylint.lint import Run as run_pylint  # type: ignore
 from pylint.reporters import CollectingReporter  # type: ignore
-from simple_chalk import chalk  # type: ignore
 
-class GitHubAnnotationsReporter(CollectingReporter):
-
-    def create_output(self) -> str:
-        annotations = []
-        for message in self.messages:
-            annotation = {
-                'path': os.path.relpath(message.abspath),
-                'start_line': message.line,
-                'end_line': message.line,
-                'message': f'[{message.symbol}] {message.msg or ""}',
-                'annotation_level': 'warning' if message.category == 'warning' else 'failure',
-            }
-            if annotation['start_line'] == ['annotation.end_line']:
-                annotation['start_column'] = message.column + 1
-                annotation['end_column'] = message.column + 1
-            annotations.append(annotation)
-        return json.dumps(annotations)
+from buildpy.util import GitHubAnnotationsReporter
+from buildpy.util import Message
+from buildpy.util import MessageParser
+from buildpy.util import PrettyReporter
 
 
-class PrettyReporter(CollectingReporter):
+class PylintMessageParser(CollectingReporter, MessageParser):
 
     @staticmethod
-    def get_summary(errorCount: int, warningCount: int) -> str:
-        summary = ''
-        if errorCount:
-            summary += chalk.red(f'{errorCount} errors')
-        if warningCount:
-            summary = f'{summary} and ' if summary else ''
-            summary += chalk.yellow(f'{warningCount} warnings')
-        return summary
+    def _get_error_level(pylintLevel: str) -> str:
+        pylintLevel = pylintLevel.lower()
+        if pylintLevel == 'info':
+            return 'notice'
+        if pylintLevel == 'warning':
+            return 'warning'
+        return 'error'
 
-    def create_output(self) -> str:
-        fileMessageMap = defaultdict(list)
-        for message in self.messages:
-            fileMessageMap[os.path.relpath(message.abspath)].append(message)
-        totalErrorCount = 0
-        totalWarningCount = 0
-        outputs = []
-        for (filePath, messages) in fileMessageMap.items():
-            fileOutputs = []
-            for message in messages:
-                location = chalk.grey(f'{filePath}:{message.line}:{message.column + 1}')
-                color = chalk.yellow if message.category == 'warning' else chalk.red
-                fileOutputs.append(f'{location} [{color(message.symbol)}] {message.msg}')
-            errorCount = sum(1 for message in messages if message.category != 'warning')
-            totalErrorCount += errorCount
-            warningCount = sum(1 for message in messages if message.category == 'warning')
-            totalWarningCount += warningCount
-            fileOutputString = '\n'.join(fileOutputs)
-            outputs.append(f'{self.get_summary(errorCount, warningCount)} in {filePath}\n{fileOutputString}\n')
-        output = '\n'.join(outputs)
-        output += f'\nFailed due to {self.get_summary(totalErrorCount, totalWarningCount)}.' if (totalErrorCount or totalWarningCount) else chalk.green('Passed.')
+    def parse_messages(self, rawMessages: List[str]) -> List[Message]:
+        raise NotImplementedError
+
+    def get_messages(self) -> List[Message]:
+        output: List[Message] = []
+        for rawMessage in self.messages:
+            output.append(Message(
+                path=os.path.relpath(rawMessage.abspath),
+                line=rawMessage.line,
+                column=rawMessage.column + 1,
+                code=rawMessage.symbol,
+                text=rawMessage.msg.strip() or '',
+                level=self._get_error_level(pylintLevel=rawMessage.category),
+            ))
         return output
 
 
@@ -70,10 +47,11 @@ class PrettyReporter(CollectingReporter):
 def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
     targetDirectory = os.path.abspath(directory or os.getcwd())
-    reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
     pylintConfigFilePath = configFilePath or f'{currentDirectory}/pylintrc'
-    run_pylint([f'--rcfile={pylintConfigFilePath}', targetDirectory], reporter=reporter, exit=False)
-    output = reporter.create_output()  # type: ignore
+    pylintMessageParser = PylintMessageParser()
+    run_pylint([f'--rcfile={pylintConfigFilePath}', targetDirectory], reporter=pylintMessageParser, exit=False)
+    reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
+    output = reporter.create_output(messages=pylintMessageParser.get_messages())
     if outputFilename:
         with open(outputFilename, 'w') as outputFile:
             outputFile.write(output)

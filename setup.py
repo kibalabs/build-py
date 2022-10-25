@@ -1,4 +1,5 @@
 import os
+
 from setuptools import find_packages
 from setuptools import setup
 
@@ -24,6 +25,7 @@ setup(
             'py.typed',
             'pylintrc',
             'mypy.ini',
+            'bandit.yaml',
         ]
     },
     include_package_data=True,
@@ -34,6 +36,7 @@ setup(
         [console_scripts]
         lint=buildpy.lint:run
         type-check=buildpy.type_check:run
+        security-check=buildpy.security_check:run
         version=buildpy.version:run
     ''',
 )
