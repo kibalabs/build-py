@@ -13,6 +13,15 @@ from buildpy.util import PrettyReporter
 
 class PylintMessageParser(CollectingReporter, MessageParser):
 
+    @staticmethod
+    def _get_error_level(pylintLevel: str) -> str:
+        pylintLevel = pylintLevel.lower()
+        if pylintLevel == 'info':
+            return 'notice'
+        if pylintLevel == 'warning':
+            return 'warning'
+        return 'error'
+
     def parse_messages(self, rawMessages: List[str]) -> List[Message]:
         raise NotImplementedError
 
@@ -25,7 +34,7 @@ class PylintMessageParser(CollectingReporter, MessageParser):
                 column=rawMessage.column + 1,
                 code=rawMessage.symbol,
                 text=rawMessage.msg.strip() or '',
-                level='notice' if rawMessage.category.lower() == 'info' else ('warning' if rawMessage.category.lower() == 'warning' else 'error'),
+                level=self._get_error_level(pylintLevel=rawMessage.category),
             ))
         return output
 
