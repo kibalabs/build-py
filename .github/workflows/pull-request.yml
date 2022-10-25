@@ -14,7 +14,7 @@ jobs:
       run: docker build --tag $DOCKER_IMAGE .
     - name: Run linting
       run: |
-        docker run --name linting $DOCKER_IMAGE python buildpy/lint.py --directory buildpy --output-file linting-results.json --output-format annotations
+        docker run --name linting $DOCKER_IMAGE python lint --directory buildpy --output-file linting-results.json --output-format annotations
         docker cp linting:/app/linting-results.json ./linting-results.json
     - name: Upload build linting results
       uses: kibalabs/github-action-create-annotations@main
@@ -25,7 +25,7 @@ jobs:
         fail-on-error: false
     - name: Run typing
       run: |
-        docker run --name typing $DOCKER_IMAGE python buildpy/type_check.py --directory buildpy --output-file typing-results.json --output-format annotations
+        docker run --name typing $DOCKER_IMAGE python type-check --directory buildpy --output-file typing-results.json --output-format annotations
         docker cp typing:/app/typing-results.json ./typing-results.json
     - name: Upload build typing results
       uses: kibalabs/github-action-create-annotations@main
@@ -36,7 +36,7 @@ jobs:
         fail-on-error: false
     - name: Run security
       run: |
-        docker run --name security $DOCKER_IMAGE python buildpy/security_check.py --directory buildpy --output-file security-results.json --output-format annotations
+        docker run --name security $DOCKER_IMAGE python security-check --directory buildpy --output-file security-results.json --output-format annotations
         docker cp security:/app/security-results.json ./security-results.json
     - name: Upload build security results
       uses: kibalabs/github-action-create-annotations@main
