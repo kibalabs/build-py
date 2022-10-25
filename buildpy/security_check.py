@@ -87,6 +87,15 @@ BANDIT_CODES = {
 
 class BanditMessageParser(MessageParser):
 
+    @staticmethod
+    def _get_error_level(banditLevel: str) -> str:
+        banditLevel = banditLevel.lower()
+        if banditLevel == 'low':
+            return 'notice'
+        if banditLevel == 'warning':
+            return 'warning'
+        return 'error'
+
     def parse_messages(self, rawMessages: List[str]) -> List[Message]:
         output: List[Message] = []
         for rawMessage in rawMessages:
@@ -96,15 +105,24 @@ class BanditMessageParser(MessageParser):
             rawMessageParts = rawMessage.split('\t')
             if len(rawMessageParts) == 1:
                 continue
-            banditLevel = rawMessageParts[5].lower()
-            output.append(Message(
-                path=rawMessageParts[0],
-                line=int(rawMessageParts[1]),
-                column=int(rawMessageParts[2]),
-                code=BANDIT_CODES[rawMessageParts[3]],
-                text=rawMessageParts[4],
-                level='notice' if banditLevel == 'low' else ('warning' if banditLevel == 'warning' else 'error'),
-            ))
+            if rawMessageParts[0] == '[tester]':
+                output.append(Message(
+                    path='',
+                    line=0,
+                    column=0,
+                    code='tester',
+                    text=rawMessageParts[2],
+                    level=self._get_error_level(banditLevel=rawMessageParts[1]),
+                ))
+            else:
+                output.append(Message(
+                    path=rawMessageParts[0],
+                    line=int(rawMessageParts[1]),
+                    column=int(rawMessageParts[2]),
+                    code=BANDIT_CODES[rawMessageParts[3]],
+                    text=rawMessageParts[4],
+                    level=self._get_error_level(banditLevel=rawMessageParts[5]),
+                ))
         return output
 
 
@@ -121,7 +139,7 @@ def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: 
     # TODO(krishan711): use test_name here once enabled https://github.com/PyCQA/bandit/issues/962
     messageTemplate = '{abspath}\t{line}\t{col}\t{test_id}\t{msg}\t{severity}'
     try:
-        subprocess.check_output(f'bandit --configfile {banditConfigFilePath} --silent --severity-level medium --confidence-level medium --format custom --msg-template \"{messageTemplate}\" --recursive {targetDirectory}', stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output(f'bandit --configfile {banditConfigFilePath} --silent --severity-level medium --confidence-level medium --format custom --msg-template \"{messageTemplate}\" --recursive {targetDirectory}', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
     messageParser = BanditMessageParser()

@@ -42,7 +42,7 @@ def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: 
     messages = []
     mypyConfigFilePath = configFilePath or f'{currentDirectory}/mypy.ini'
     try:
-        subprocess.check_output(f'mypy {targetDirectory} --config-file {mypyConfigFilePath} --no-color-output --no-error-summary --show-column-numbers', stderr=subprocess.STDOUT, shell=True)
+        subprocess.check_output(f'mypy {targetDirectory} --config-file {mypyConfigFilePath} --no-color-output --no-error-summary --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
     messageParser = MypyMessageParser()
