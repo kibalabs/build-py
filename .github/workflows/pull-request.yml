@@ -34,3 +34,14 @@ jobs:
         json-file-path: ./typing-results.json
         check-name: type-package
         fail-on-error: false
+    - name: Run security
+      run: |
+        docker run --name security $DOCKER_IMAGE python buildpy/security_check.py --directory buildpy --output-file security-results.json --output-format annotations
+        docker cp security:/app/security-results.json ./security-results.json
+    - name: Upload build security results
+      uses: kibalabs/github-action-create-annotations@main
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        json-file-path: ./security-results.json
+        check-name: security-package
+        fail-on-error: false
