@@ -17,16 +17,22 @@ class MypyMessageParser(MessageParser):
         output: List[Message] = []
         for rawMessage in rawMessages:
             rawMessage = rawMessage.strip()
-            if len(rawMessage) == 0:
+            if len(rawMessage) == 0 \
+                or 'note: See https://mypy.readthedocs.io/en' in rawMessage \
+                or 'Use "-> None" if function does not return a value' in rawMessage:
                 continue
-            match = re.match(r'(.*):(\d*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
+            match1 = re.match(r'(.*):(\d*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
+            match2 = None
+            if not match1:
+                # match2 = match1 without column number
+                match2 = re.match(r'(.*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
             output.append(Message(
-                path=match.group(1) if match else '',
-                line=int(match.group(2)) if match else 0,
-                column=int(match.group(3)) if match else 0,
-                code=match.group(6) if match else 'unparsed',
-                text=match.group(5).strip() if match else rawMessage.strip(),
-                level=match.group(4) if match else 'error',
+                path=match1.group(1) if match1 else (match2.group(1) if match2 else ''),
+                line=int(match1.group(2)) if match1 else (int(match2.group(2)) if match2 else 0),
+                column=int(match1.group(3)) if match1 else (0 if match2 else 0),
+                code=match1.group(6) if match1 else (match2.group(5) if match2 else 'unparsed'),
+                text=match1.group(5).strip() if match1 else (match2.group(4).strip() if match2 else rawMessage.strip()),
+                level=match1.group(4) if match1 else (match2.group(3) if match2 else 'error'),
             ))
         return output
 
