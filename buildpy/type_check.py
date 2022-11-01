@@ -18,7 +18,7 @@ class MypyMessageParser(MessageParser):
         for rawMessage in rawMessages:
             rawMessage = rawMessage.strip()
             if len(rawMessage) == 0 \
-                or 'note: See https://mypy.readthedocs.io/en' in rawMessage \
+                or ' note: ' in rawMessage \
                 or 'Use "-> None" if function does not return a value' in rawMessage:
                 continue
             match1 = re.match(r'(.*):(\d*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
@@ -48,7 +48,7 @@ def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: 
     messages = []
     mypyConfigFilePath = configFilePath or f'{currentDirectory}/mypy.ini'
     try:
-        subprocess.check_output(f'mypy {targetDirectory} --config-file {mypyConfigFilePath} --no-color-output --no-error-summary --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+        subprocess.check_output(f'mypy {targetDirectory} --config-file {mypyConfigFilePath} --no-color-output --hide-error-context --no-pretty --no-error-summary --show-error-codes --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
     messageParser = MypyMessageParser()
