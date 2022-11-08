@@ -2,8 +2,8 @@ import os
 from typing import List
 
 import click
-from pylint.lint import Run as run_pylint  # type: ignore
-from pylint.reporters import CollectingReporter  # type: ignore
+from pylint.lint import Run as run_pylint  # type: ignore[import]
+from pylint.reporters import CollectingReporter  # type: ignore[import]
 
 from buildpy.util import GitHubAnnotationsReporter
 from buildpy.util import Message
