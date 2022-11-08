@@ -13,7 +13,7 @@ with open(os.path.join(setupDirectory, 'requirements.txt'), 'r') as requirements
 
 setup(
     name='kiba-build',
-    version='0.1.5',
+    version='0.1.6',
     description='Kiba Labs\' python building and testing utilities',
     url='https://github.com/kibalabs/build-py',
     packages=find_packages(exclude=['tests*']),
