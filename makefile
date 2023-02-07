@@ -5,26 +5,26 @@ list-outdated: install
 	@ pip list -o
 
 lint-check:
-	@ lint --directory ./core
+	@ lint --directory ./buildpy
 
 lint-check-ci:
-	@ lint --directory ./core --output-file lint-check-results.json --output-format annotations
+	@ lint --directory ./buildpy --output-file lint-check-results.json --output-format annotations
 
 lint-fix:
-	@ isort --sl -l 1000 ./core
-	@ lint --directory ./core
+	@ isort --sl -l 1000 ./buildpy
+	@ lint --directory ./buildpy
 
 type-check:
-	@ type-check --directory ./core
+	@ type-check --directory ./buildpy
 
 type-check-ci:
-	@ type-check --directory ./core --output-file type-check-results.json --output-format annotations
+	@ type-check --directory ./buildpy --output-file type-check-results.json --output-format annotations
 
 security-check:
-	@ security-check --directory ./core
+	@ security-check --directory ./buildpy
 
 security-check-ci:
-	@ security-check --directory ./core --output-file security-check-results.json --output-format annotations
+	@ security-check --directory ./buildpy --output-file security-check-results.json --output-format annotations
 
 build:
 	@ echo "Not Supported"
