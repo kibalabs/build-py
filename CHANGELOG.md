@@ -13,6 +13,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Removed
 
+## [0.1.8] - 2023-02-16
+
+### Changed
+-[MINOR] Update mypy to 1.0.0
+-[PATCH] Fix for github annotations
+
 ## [0.1.7] - 2022-11-15
 
 ### Changed
