@@ -41,8 +41,7 @@ class GitHubAnnotationsReporter(KibaReporter):
                 'start_column': message.column,
                 'end_column': message.column,
                 'message': f'[{message.code}] {message.text}',
-                'annotation_level':
-                'note' if message.level == 'notice' else ('warning' if message.level == 'warning' else 'failure'),
+                'annotation_level': 'notice' if message.level == 'notice' else ('warning' if message.level == 'warning' else 'failure'),
             }
             annotations.append(annotation)
         return json.dumps(annotations)
