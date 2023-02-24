@@ -19,6 +19,7 @@ disable=suppressed-message,
         f-string-without-interpolation,
         raise-missing-from,
         unspecified-encoding,
+        superfluous-parens,
 
 enable=useless-suppression,
 

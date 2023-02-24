@@ -49,7 +49,7 @@ def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: 
     targetDirectory = os.path.abspath(directory or os.getcwd())
     pylintConfigFilePath = configFilePath or f'{currentDirectory}/pylintrc'
     pylintMessageParser = PylintMessageParser()
-    run_pylint([f'--rcfile={pylintConfigFilePath}', targetDirectory], reporter=pylintMessageParser, exit=False)
+    run_pylint([f'--rcfile={pylintConfigFilePath}', f'--jobs=0', targetDirectory], reporter=pylintMessageParser, exit=False)
     reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
     output = reporter.create_output(messages=pylintMessageParser.get_messages())
     if outputFilename:
