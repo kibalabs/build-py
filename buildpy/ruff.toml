@@ -1,24 +1,24 @@
 select = [
-    "I",   # isort
-    "E",   # pycodestyle
-    "F",   # Pyflakes
-    "W",   # pycodestyle
-    "N",   # pep8-naming
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
+    "I", # isort
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "W", # pycodestyle
+    "N", # pep8-naming
+    "B", # flake8-bugbear
+    "C4", # flake8-comprehensions
     "PGH", # pygrep-hooks
     "PLC", # pylint
     "PLE", # pylint
     "PLR", # pylint
     "PLW", # pylint
-    "S",   # flake8-bandit
+    "S", # flake8-bandit
     "SIM", # flake8-simplify
     "T10", # flake8-debugger
-    # "UP",  # pyupgrade
+    # "UP", # pyupgrade
     "RUF100",  # yesqa
 ]
 ignore = [
-    "E501",
+    "E501", # line-too-long
     "F541", # f-string-missing-placeholders
     "TRY003", # raise-vanilla-args
     "S105", # hardcoded-password-string
@@ -61,14 +61,7 @@ exclude = [
     "venv",
 ]
 per-file-ignores = {}
-
-# Same as Black.
-line-length = 88
-
-# Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-# Assume Python 3.10.
 target-version = "py310"
 
 [isort]

@@ -68,8 +68,10 @@ class RuffMessageParser(MessageParser):
 def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str, shouldUseNewVersion: bool, shouldFix: bool) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
     targetDirectory = os.path.abspath(directory or os.getcwd())
-    # NOTE(krishan711): track ruff called from python: https://github.com/charliermarsh/ruff/issues/659
     if shouldUseNewVersion:
+        # NOTE(krishan711): track ruff called from python: https://github.com/charliermarsh/ruff/issues/659
+        # NOTE(krishan711): track ruff pylint coverage: https://github.com/charliermarsh/ruff/issues/970
+        # NOTE(krishan711): track ruff bandit coverage: https://github.com/charliermarsh/ruff/issues/1646
         ruffConfigFilePath = configFilePath or f'{currentDirectory}/ruff.toml'
         rawMessages = []
         try:
