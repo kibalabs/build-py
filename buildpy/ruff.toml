@@ -1,8 +1,9 @@
 select = [
+    "I",   # isort
     "E",   # pycodestyle
     "F",   # Pyflakes
     "W",   # pycodestyle
-    # plugins:
+    "N",   # pep8-naming
     "B",   # flake8-bugbear
     "C4",  # flake8-comprehensions
     "PGH", # pygrep-hooks
@@ -20,14 +21,21 @@ ignore = [
     "E501",
     "F541", # f-string-missing-placeholders
     "TRY003", # raise-vanilla-args
+    "S105", # hardcoded-password-string
+    "S106", # hardcoded-password-func-arg
+    "S107", # hardcoded-password-default
+    "PLR0911", # too-many-return-statements
+    "PLR0912", # too-many-branches
     "PLR0913", # too-many-arguments
+    "PLR0915", # too-many-statements
     "UP006", # deprecated-collection-type"
     "UP007", # typing-union
+    "B904", # raise-without-from-inside-except
 ]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 # fixable = ["A", "B", "C", "D", "E", "F", "I"]
-unfixable = ["I"]
+unfixable = []
 
 # Exclude a variety of commonly ignored directories.
 exclude = [
@@ -62,3 +70,6 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 # Assume Python 3.10.
 target-version = "py310"
+
+[isort]
+force-single-line = true
