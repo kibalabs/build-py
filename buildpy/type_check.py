@@ -1,7 +1,7 @@
 import os
 import re
 import subprocess
-from typing import List, Optional
+from typing import List
 
 import click
 

@@ -127,19 +127,18 @@ class BanditMessageParser(MessageParser):
 
 
 @click.command()
-@click.option('-d', '--directory', 'directory', required=False, type=str)
+@click.argument('targets', nargs=-1)
 @click.option('-o', '--output-file', 'outputFilename', required=False, type=str)
 @click.option('-f', '--output-format', 'outputFormat', required=False, type=str, default='pretty')
 @click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
-def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str) -> None:
+def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
-    targetDirectory = os.path.abspath(directory or os.getcwd())
-    messages = []
+    messages: List[str] = []
     banditConfigFilePath = configFilePath or f'{currentDirectory}/bandit.yaml'
     # TODO(krishan711): use test_name here once enabled https://github.com/PyCQA/bandit/issues/962
     messageTemplate = '{abspath}\t{line}\t{col}\t{test_id}\t{msg}\t{severity}'
     try:
-        subprocess.check_output(f'bandit --configfile {banditConfigFilePath} --silent --severity-level medium --confidence-level medium --format custom --msg-template \"{messageTemplate}\" --recursive {targetDirectory}', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+        subprocess.check_output(f'bandit --configfile {banditConfigFilePath} --silent --severity-level medium --confidence-level medium --format custom --msg-template \"{messageTemplate}\" --recursive {" ".join(targets)}', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
     messageParser = BanditMessageParser()
