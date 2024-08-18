@@ -21,7 +21,7 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         json-file-path: ./lint-check-results.json
-        check-name: core-lint-check
+        check-name: lint-check
         fail-on-error: false
     - name: Run type-check
       run: |
@@ -32,7 +32,7 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         json-file-path: ./type-check-results.json
-        check-name: core-type-check
+        check-name: type-check
         fail-on-error: false
     - name: Run security-check
       run: |
@@ -43,5 +43,5 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         json-file-path: ./security-check-results.json
-        check-name: core-security-check
+        check-name: security-check
         fail-on-error: false

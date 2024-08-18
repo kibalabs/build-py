@@ -38,17 +38,16 @@ class MypyMessageParser(MessageParser):
 
 
 @click.command()
-@click.option('-d', '--directory', 'directory', required=False, type=str)
+@click.argument('targets', nargs=-1)
 @click.option('-o', '--output-file', 'outputFilename', required=False, type=str)
 @click.option('-f', '--output-format', 'outputFormat', required=False, type=str, default='pretty')
 @click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
-def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str) -> None:
+def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
-    targetDirectory = os.path.abspath(directory or os.getcwd())
-    messages = []
     mypyConfigFilePath = configFilePath or f'{currentDirectory}/mypy.ini'
+    messages: List[str] = []
     try:
-        subprocess.check_output(f'mypy {targetDirectory} --config-file {mypyConfigFilePath} --no-color-output --hide-error-context --no-pretty --no-error-summary --show-error-codes --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+        subprocess.check_output(f'mypy {" ".join(targets)} --config-file {mypyConfigFilePath} --no-color-output --hide-error-context --no-pretty --no-error-summary --show-error-codes --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
     messageParser = MypyMessageParser()

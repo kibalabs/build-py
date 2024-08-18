@@ -1,6 +1,6 @@
 import os
 
-from setuptools import find_packages
+from setuptools import find_packages  # type: ignore[import-untyped]
 from setuptools import setup
 
 setupDirectory = os.path.dirname(os.path.realpath(__file__))

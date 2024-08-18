@@ -2,8 +2,8 @@ import os
 from typing import List
 
 import click
-from pylint.lint import Run as run_pylint  # type: ignore[import]
-from pylint.reporters import CollectingReporter  # type: ignore[import]
+from pylint.lint import Run as run_pylint
+from pylint.reporters import CollectingReporter
 
 from buildpy.util import GitHubAnnotationsReporter
 from buildpy.util import Message
@@ -40,16 +40,15 @@ class PylintMessageParser(CollectingReporter, MessageParser):
 
 
 @click.command()
-@click.option('-d', '--directory', 'directory', required=False, type=str)
+@click.argument('targets', nargs=-1)
 @click.option('-o', '--output-file', 'outputFilename', required=False, type=str)
 @click.option('-f', '--output-format', 'outputFormat', required=False, type=str, default='pretty')
 @click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
-def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str) -> None:
+def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
-    targetDirectory = os.path.abspath(directory or os.getcwd())
     pylintConfigFilePath = configFilePath or f'{currentDirectory}/pylintrc'
     pylintMessageParser = PylintMessageParser()
-    run_pylint([f'--rcfile={pylintConfigFilePath}', f'--jobs=0', targetDirectory], reporter=pylintMessageParser, exit=False)
+    run_pylint([f'--rcfile={pylintConfigFilePath}', f'--jobs=0'] + list(targets), reporter=pylintMessageParser, exit=False)
     reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
     output = reporter.create_output(messages=pylintMessageParser.get_messages())
     if outputFilename:
