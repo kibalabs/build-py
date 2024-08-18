@@ -2,8 +2,8 @@ import os
 from typing import List
 
 import click
-from pylint.lint import Run as run_pylint 
-from pylint.reporters import CollectingReporter 
+from pylint.lint import Run as run_pylint
+from pylint.reporters import CollectingReporter
 
 from buildpy.util import GitHubAnnotationsReporter
 from buildpy.util import Message
