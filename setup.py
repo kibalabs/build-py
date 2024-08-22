@@ -23,9 +23,7 @@ setup(
     package_data={
         'buildpy': [
             'py.typed',
-            'pylintrc',
-            'mypy.ini',
-            'bandit.yaml',
+            'pyproject.toml',
         ]
     },
     include_package_data=True,
@@ -34,7 +32,8 @@ setup(
     },
     entry_points='''
         [console_scripts]
-        lint=buildpy.lint:run
+        lint=buildpy.lint_check:run
+        lint-check=buildpy.lint_check:run
         type-check=buildpy.type_check:run
         security-check=buildpy.security_check:run
         version=buildpy.version:run

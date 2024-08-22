@@ -102,6 +102,7 @@ class BanditMessageParser(MessageParser):
             rawMessage = rawMessage.strip()
             if len(rawMessage) == 0 or rawMessage.startswith('filename,test_name,'):
                 continue
+            print(rawMessage)
             rawMessageParts = rawMessage.split('\t')
             if len(rawMessageParts) == 1:
                 continue
@@ -134,7 +135,7 @@ class BanditMessageParser(MessageParser):
 def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
     messages: List[str] = []
-    banditConfigFilePath = configFilePath or f'{currentDirectory}/bandit.yaml'
+    banditConfigFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
     # TODO(krishan711): use test_name here once enabled https://github.com/PyCQA/bandit/issues/962
     messageTemplate = '{abspath}\t{line}\t{col}\t{test_id}\t{msg}\t{severity}'
     try:
