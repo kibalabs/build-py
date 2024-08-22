@@ -21,6 +21,9 @@ class MypyMessageParser(MessageParser):
                 or ' note: ' in rawMessage \
                 or 'Use "-> None" if function does not return a value' in rawMessage:
                 continue
+            if 'Error importing plugin "pydantic.mypy":' in rawMessage:
+                # NOTE(krishan711): we use pydantic rules but it may not be installed (like in this repo)
+                continue
             match1 = re.match(r'(.*):(\d*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
             match2 = None
             if not match1:
