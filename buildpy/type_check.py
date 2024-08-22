@@ -21,6 +21,9 @@ class MypyMessageParser(MessageParser):
                 or ' note: ' in rawMessage \
                 or 'Use "-> None" if function does not return a value' in rawMessage:
                 continue
+            if 'Error importing plugin "pydantic.mypy":' in rawMessage:
+                # NOTE(krishan711): we use pydantic rules but it may not be installed (like in this repo)
+                continue
             match1 = re.match(r'(.*):(\d*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
             match2 = None
             if not match1:
@@ -44,7 +47,7 @@ class MypyMessageParser(MessageParser):
 @click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
 def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
-    mypyConfigFilePath = configFilePath or f'{currentDirectory}/mypy.ini'
+    mypyConfigFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
     messages: List[str] = []
     try:
         subprocess.check_output(f'mypy {" ".join(targets)} --config-file {mypyConfigFilePath} --no-color-output --hide-error-context --no-pretty --no-error-summary --show-error-codes --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
