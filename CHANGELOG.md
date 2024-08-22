@@ -13,6 +13,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Removed
 
+## [0.1.10] - 2024-08-22
+
+### Changed
+- [MAJOR] Changed all commands to accept multiple paths and removed --directory input
+- [MINOR] Updated dependencies
+
 ## [0.1.9] - 2023-08-22
 
 ### Changed
