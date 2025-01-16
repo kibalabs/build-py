@@ -11,7 +11,7 @@ lint-check-ci:
 	@ lint-check --new *.py ./buildpy --output-file lint-check-results.json --output-format annotations
 
 lint-fix:
-	@ isort --sl -l 1000 *.py ./buildpy
+	# @ isort --sl -l 1000 *.py ./buildpy
 	@ lint-check --new --fix *.py ./buildpy
 
 type-check:

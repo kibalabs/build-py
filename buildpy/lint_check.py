@@ -77,7 +77,6 @@ def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePa
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
         except subprocess.CalledProcessError as exception:
-            print('exception.output', exception.output)
             rawMessages = json.loads(exception.output.decode())
         messageParser = RuffMessageParser()
         messages = messageParser.parse_json_messages(rawMessages=rawMessages)

@@ -154,7 +154,7 @@ exclude = [
 ]
 target-version = "py310"
 
-[tool.lint]
+[tool.ruff.lint]
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 select = [
     "I", # isort
@@ -194,6 +194,9 @@ ignore = [
 # fixable = ["A", "B", "C", "D", "E", "F", "I"]
 unfixable = []
 per-file-ignores = {}
+
+[tool.ruff.lint.isort]
+force-single-line = true
 
 [tool.isort]
 force-single-line = true
