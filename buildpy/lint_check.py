@@ -1,12 +1,13 @@
-import os
 import json
+import os
 import subprocess
-import re
-from typing import List, Any, Dict
+from typing import Any
+from typing import Dict
+from typing import List
 
 import click
-from pylint.lint import Run as run_pylint  # type: ignore[import]
-from pylint.reporters import CollectingReporter  # type: ignore[import]
+from pylint.lint import Run as run_pylint
+from pylint.reporters import CollectingReporter
 
 from buildpy.util import GitHubAnnotationsReporter
 from buildpy.util import Message
@@ -59,31 +60,33 @@ class RuffMessageParser(MessageParser):
 
 
 @click.command()
-@click.option('-d', '--directory', 'directory', required=False, type=str)
+@click.argument('targets', nargs=-1)
 @click.option('-o', '--output-file', 'outputFilename', required=False, type=str)
 @click.option('-f', '--output-format', 'outputFormat', required=False, type=str, default='pretty')
 @click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
 @click.option('-n', '--new', 'shouldUseNewVersion', default=False, is_flag=True)
 @click.option('-x', '--fix', 'shouldFix', default=False, is_flag=True)
-def run(directory: str, outputFilename: str, outputFormat: str, configFilePath: str, shouldUseNewVersion: bool, shouldFix: bool) -> None:
+def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str, shouldUseNewVersion: bool, shouldFix: bool) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
-    targetDirectory = os.path.abspath(directory or os.getcwd())
     if shouldUseNewVersion:
+        # targetDirectory = os.path.abspath(directory or os.getcwd())
         # NOTE(krishan711): track ruff called from python: https://github.com/charliermarsh/ruff/issues/659
         # NOTE(krishan711): track ruff pylint coverage: https://github.com/charliermarsh/ruff/issues/970
         # NOTE(krishan711): track ruff bandit coverage: https://github.com/charliermarsh/ruff/issues/1646
         ruffConfigFilePath = configFilePath or f'{currentDirectory}/ruff.toml'
         rawMessages = []
+        command = f'ruff check --output-format json --config {ruffConfigFilePath} {"--fix" if shouldFix else ""} {" ".join(targets)}'
+        print(f'command: {command}')
         try:
-            subprocess.check_output(f'ruff check --format json --config {ruffConfigFilePath} {"--fix" if shouldFix else ""} {targetDirectory}', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+            subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
         except subprocess.CalledProcessError as exception:
             rawMessages = json.loads(exception.output.decode())
         messageParser = RuffMessageParser()
         messages = messageParser.parse_json_messages(rawMessages=rawMessages)
     else:
-        pylintConfigFilePath = configFilePath or f'{currentDirectory}/pylintrc'
+        pylintConfigFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
         messageParser = PylintMessageParser()
-        run_pylint([f'--rcfile={pylintConfigFilePath}', f'--jobs=0', targetDirectory], reporter=messageParser, exit=False)
+        run_pylint([f'--rcfile={pylintConfigFilePath}', f'--jobs=0'] + list(targets), reporter=messageParser, exit=False)
         messages = messageParser.get_messages()
     reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
     output = reporter.create_output(messages=messages)
