@@ -68,23 +68,22 @@ class RuffMessageParser(MessageParser):
 @click.option('-x', '--fix', 'shouldFix', default=False, is_flag=True)
 def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str, shouldUseNewVersion: bool, shouldFix: bool) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
+    configFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
     if shouldUseNewVersion:
         # NOTE(krishan711): track ruff called from python: https://github.com/charliermarsh/ruff/issues/659
         # NOTE(krishan711): track ruff pylint coverage: https://github.com/charliermarsh/ruff/issues/970
-        ruffConfigFilePath = configFilePath or f'{currentDirectory}/ruff.toml'
         rawMessages = []
-        command = f'ruff check --output-format json --config {ruffConfigFilePath} {"--fix" if shouldFix else ""} {" ".join(targets)}'
-        print(f'command: {command}')
+        command = f'ruff check --output-format json --config {configFilePath} {"--fix" if shouldFix else ""} {" ".join(targets)}'
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
         except subprocess.CalledProcessError as exception:
+            print('exception.output', exception.output)
             rawMessages = json.loads(exception.output.decode())
         messageParser = RuffMessageParser()
         messages = messageParser.parse_json_messages(rawMessages=rawMessages)
     else:
-        pylintConfigFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
         messageParser = PylintMessageParser()
-        run_pylint([f'--rcfile={pylintConfigFilePath}', f'--jobs=0'] + list(targets), reporter=messageParser, exit=False)
+        run_pylint([f'--rcfile={configFilePath}', '--jobs=0'] + list(targets), reporter=messageParser, exit=False)
         messages = messageParser.get_messages()
     reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()
     output = reporter.create_output(messages=messages)
