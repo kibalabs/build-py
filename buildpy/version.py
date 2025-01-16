@@ -12,9 +12,9 @@ def generate_command(part: str) -> str:
 def run(part: str, count: int) -> None:
     # NOTE(krishan711): for dev releases bump the patch first
     if part == 'dev':
-        subprocess.check_output(generate_command(part='patch'), stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+        subprocess.check_output(generate_command(part='patch'), stderr=subprocess.STDOUT, shell=True)  # noqa: S602
     for _ in range(count):
-        subprocess.check_output(generate_command(part=part), stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+        subprocess.check_output(generate_command(part=part), stderr=subprocess.STDOUT, shell=True)  # noqa: S602
 
 if __name__ == '__main__':
     run()  # pylint: disable=no-value-for-parameter

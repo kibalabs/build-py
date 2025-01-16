@@ -98,8 +98,8 @@ class BanditMessageParser(MessageParser):
 
     def parse_messages(self, rawMessages: List[str]) -> List[Message]:
         output: List[Message] = []
-        for rawMessage in rawMessages:
-            rawMessage = rawMessage.strip()
+        for rawRawMessage in rawMessages:
+            rawMessage = rawRawMessage.strip()
             if len(rawMessage) == 0 or rawMessage.startswith('filename,test_name,'):
                 continue
             print(rawMessage)
@@ -138,8 +138,9 @@ def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePa
     banditConfigFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
     # TODO(krishan711): use test_name here once enabled https://github.com/PyCQA/bandit/issues/962
     messageTemplate = '{abspath}\t{line}\t{col}\t{test_id}\t{msg}\t{severity}'
+    command = f'bandit --configfile {banditConfigFilePath} --silent --severity-level medium --confidence-level medium --format custom --msg-template \"{messageTemplate}\" --recursive {" ".join(targets)}'
     try:
-        subprocess.check_output(f'bandit --configfile {banditConfigFilePath} --silent --severity-level medium --confidence-level medium --format custom --msg-template \"{messageTemplate}\" --recursive {" ".join(targets)}', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+        subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # noqa: S602
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
     messageParser = BanditMessageParser()

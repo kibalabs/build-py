@@ -15,8 +15,8 @@ class MypyMessageParser(MessageParser):
 
     def parse_messages(self, rawMessages: List[str]) -> List[Message]:
         output: List[Message] = []
-        for rawMessage in rawMessages:
-            rawMessage = rawMessage.strip()
+        for rawRawMessage in rawMessages:
+            rawMessage = rawRawMessage.strip()
             if len(rawMessage) == 0 \
                 or ' note: ' in rawMessage \
                 or 'Use "-> None" if function does not return a value' in rawMessage:
@@ -49,8 +49,9 @@ def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePa
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
     mypyConfigFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
     messages: List[str] = []
+    command = f'mypy {" ".join(targets)} --config-file {mypyConfigFilePath} --no-color-output --hide-error-context --no-pretty --no-error-summary --show-error-codes --show-column-numbers'
     try:
-        subprocess.check_output(f'mypy {" ".join(targets)} --config-file {mypyConfigFilePath} --no-color-output --hide-error-context --no-pretty --no-error-summary --show-error-codes --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+        subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # noqa: S602
     except subprocess.CalledProcessError as exception:
         messages = exception.output.decode().split('\n')
     messageParser = MypyMessageParser()

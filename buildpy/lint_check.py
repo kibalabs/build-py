@@ -6,7 +6,7 @@ from typing import Dict
 from typing import List
 
 import click
-from pylint.lint import Run as run_pylint
+from pylint.lint import Run as run_pylint  # noqa: N813
 from pylint.reporters import CollectingReporter
 
 from buildpy.util import GitHubAnnotationsReporter
@@ -75,7 +75,7 @@ def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePa
         rawMessages = []
         command = f'ruff check --output-format json --config {configFilePath} {"--fix" if shouldFix else ""} {" ".join(targets)}'
         try:
-            subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true
+            subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # noqa: S602
         except subprocess.CalledProcessError as exception:
             rawMessages = json.loads(exception.output.decode())
         messageParser = RuffMessageParser()
