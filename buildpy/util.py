@@ -4,7 +4,7 @@ import os
 from collections import defaultdict
 from typing import List
 
-from simple_chalk import chalk  # type: ignore
+from simple_chalk import chalk
 
 
 @dataclasses.dataclass
