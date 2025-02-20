@@ -27,3 +27,6 @@ version = "buildpy.version:run"
 
 [tool.uv]
 package = true
+
+[tool.setuptools.package-data]
+core = ["py.typed", "pyproject.toml"]
