@@ -1,33 +1,38 @@
 install:
-	@ pip install -r requirements.txt
+	@ pip install uv
+	@ uv sync
+
+install-updates:
+	@ pip install uv
+	@ uv sync
 
 list-outdated: install
 	@ pip list -o
 
 lint-check:
-	@ lint *.py ./buildpy
+	@ lint-check ./buildpy
 
 lint-check-ci:
-	@ lint *.py ./buildpy --output-file lint-check-results.json --output-format annotations
+	@ lint-check ./buildpy --output-file lint-check-results.json --output-format annotations
 
 lint-fix:
-	@ isort --sl -l 1000 *.py ./buildpy
-	@ lint *.py ./buildpy
+	@ isort --sl -l 1000 ./buildpy
+	@ lint-check ./buildpy
 
 type-check:
-	@ type-check *.py ./buildpy
+	@ type-check ./buildpy
 
 type-check-ci:
-	@ type-check *.py ./buildpy --output-file type-check-results.json --output-format annotations
+	@ type-check ./buildpy --output-file type-check-results.json --output-format annotations
 
 security-check:
-	@ security-check *.py ./buildpy
+	@ security-check ./buildpy
 
 security-check-ci:
-	@ security-check *.py ./buildpy --output-file security-check-results.json --output-format annotations
+	@ security-check ./buildpy --output-file security-check-results.json --output-format annotations
 
 build:
-	@ echo "Not Supported"
+	@ uv build
 
 start:
 	@ echo "Not Supported"
@@ -40,5 +45,15 @@ test:
 
 clean:
 	@ rm -rf ./.mypy_cache ./__pycache__ ./build ./dist
+
+publish: build
+	@ uv publish
+
+GIT_COUNT=$(shell git rev-list $(git describe --tags --abbrev=0)..HEAD --count)
+# publish-dev: build
+publish-dev:
+	echo $(GIT_COUNT)
+	uv run buildpy/version.py --part dev --count $(GIT_COUNT)
+# @ uv publish
 
 .PHONY: *

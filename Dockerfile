@@ -3,10 +3,11 @@ FROM python:3.11.0-slim
 RUN apt-get update && apt-get install --yes --no-install-recommends make
 
 WORKDIR /app
-COPY makefile $WORKDIR
+COPY makefile .
 
-COPY requirements.txt $WORKDIR
+COPY pyproject.toml .
+COPY uv.lock .
 RUN make install
 
-COPY . $WORKDIR
-RUN pip install -e .
+COPY . .
+RUN uv pip install -e .
