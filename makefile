@@ -25,12 +25,6 @@ type-check:
 type-check-ci:
 	@ uv run type-check ./buildpy --output-file type-check-results.json --output-format annotations
 
-security-check:
-	@ echo "Use lint-check"
-
-security-check-ci:
-	@ echo "Use lint-check-ci"
-
 build:
 	@ uv build
 

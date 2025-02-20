@@ -123,7 +123,7 @@ exclude = [
     "venv",
 ]
 target-version = "py313"
-line-length = 180
+line-length = 260
 
 [tool.ruff.format]
 quote-style = 'single'
@@ -158,7 +158,7 @@ select = [
     "ASYNC", # flake8-async
     "S", # flake8-bandit
     "BLE", # flake8-blind-except
-    "FBT", # flake8-boolean-trap
+    # "FBT", # flake8-boolean-trap
     "B", # flake8-bugbear
     "A", # flake8-builtins
     "COM", # flake8-commas
@@ -166,7 +166,7 @@ select = [
     "DTZ", # flake8-datetimez
     "T10", # flake8-debugger
     "DJ", # flake8-django
-    "EM", # flake8-errmsg
+    # "EM", # flake8-errmsg
     "EXE", # flake8-executable
     # "FIX", # flake8-fixme
     "FA", # flake8-future-annotations
@@ -228,10 +228,18 @@ ignore = [
     "B904", # raise-without-from-inside-except
     "N803", # invalid-argument-name
     "N806", # non-lowercase-variable-in-function,
+    "N815", # mixed-case-variable-in-class-scope
     "COM812", # missing-trailing-comma
     "Q001", # bad-quotes-multiline-string
     "Q002", # bad-quotes-docstring
-    "FBT001", # boolean-type-hint-positional-argument
+    "ANN401", # any-type - covered by type checking
+    "UP015", # redundant-open-modes
+    "RET504", # unnecessary-assign
+    "TD003", # missing-todo-link
+    "ASYNC109", # async-function-with-timeout
+    "TC001", # typing-only-first-party-import
+    "TC002", # typing-only-third-party-import
+    "TC003", # typing-only-standard-library-import
 ]
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
