@@ -1,56 +1,37 @@
-# https://mypy.readthedocs.io/en/latest/config_file.html
-
 [tool.mypy]
-plugins = 'pydantic.mypy'  # type: ignore[misc]
-
-# Import discovery
+# https://mypy.readthedocs.io/en/latest/config_file.html
+plugins = 'pydantic.mypy'
 follow_imports = 'silent'
 follow_imports_for_stubs = true
 no_silence_site_packages = true
-
-# Disallow dynamic typing
 disallow_any_decorated = true
 disallow_any_explicit = true
 disallow_any_generics = true
-
-# Untyped definitions and calls
 disallow_untyped_calls = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
-# NOTE(krishan711): this was causing errors with 0.990, uncomment once fixed
 check_untyped_defs = true
 disallow_untyped_decorators = true
-
-# None and Optional handling
 no_implicit_optional = true
 strict_optional = true
-
-# Configuring warnings
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_return_any = true
 warn_unreachable = true
-
-# Suppressing errors
 ignore_errors = false
-
-# Miscellaneous strictness flags
 allow_untyped_globals = false
 allow_redefinition = false
 implicit_reexport = true
 strict_equality = true
-
 
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
 warn_required_dynamic_aliases = true
 
-
 [tool.bandit]
 exclude_dirs = ['tests']
-
 
 [tool.pylint.main]
 # http://pylint.pycqa.org/en/latest/technical_reference/features.html
@@ -70,18 +51,16 @@ disable = [
     "raise-missing-from",
     "unspecified-encoding",
     "superfluous-parens",
+    "too-many-positional-arguments",
 ]
 enable = ["useless-suppression"]
 reports = false
 score = false
 
-# Naming conventions
 [tool.pylint.basic]
-# Allow underscores for variable names
 good-names = "_"
 variable-naming-style = "camelCase"
 include-naming-hint = true
-# Regex patterns for naming conventions
 class-attribute-rgx = "^([a-z_][A-Za-z0-9]{1,30}|[A-Z_][A-Z0-9_]{1,30}|(__.*__))$"
 variable-rgx = "^[a-z][a-zA-Z0-9]{1,50}$"
 module-rgx = "^[a-z][a-z0-9_]*$"
@@ -92,30 +71,21 @@ argument-rgx = "^[a-z][a-zA-Z0-9]{1,30}$"
 inlinevar-rgx = "^[a-z_][A-Za-z0-9]*$"
 method-rgx = "^[a-z_][a-z0-9_]{2,60}$"
 function-rgx = "^[a-z_][a-z0-9_]{2,60}$"
-no-docstring-rgx = ".*"  # Disable this if you want a minimum docstring length
-docstring-min-length = 0  # Adjust if you want a minimum docstring length
+no-docstring-rgx = ".*"
+docstring-min-length = 0
 
-# Formatting
 [tool.pylint.format]
-# Allow long lines (adjust if desired)
 ignore-long-lines = ".*"
-# Enforce single-line if/class statements (adjust as needed)
 single-line-if-stmt = false
 single-line-class-stmt = false
 
-# Miscellaneous
 [tool.pylint.miscellaneous]
-# Allow comments with 'FIXME', 'NOTE', and 'TODO'
 notes = ["FIXME", "NOTE", "TODO"]
 
-# Similarities
 [tool.pylint.similarities]
-# Adjust minimum similarity lines for code blocks (optional)
 min-similarity-lines = 4
-# Ignore imports during similarity checks (adjust if needed)
 ignore-imports = true
 
-# Code complexity (adjust limits for your project's needs)
 [tool.pylint.design]
 max-args = 100
 max-locals = 100

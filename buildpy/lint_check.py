@@ -68,7 +68,7 @@ class RuffMessageParser(MessageParser):
 @click.option('-x', '--fix', 'shouldFix', default=False, is_flag=True)
 def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str, shouldUseNewVersion: bool, shouldFix: bool) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
-    configFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
+    configFilePath = configFilePath or f'{currentDirectory}/config.toml'
     if shouldUseNewVersion:
         # NOTE(krishan711): track ruff called from python: https://github.com/charliermarsh/ruff/issues/659
         # NOTE(krishan711): track ruff pylint coverage: https://github.com/charliermarsh/ruff/issues/970
