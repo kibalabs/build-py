@@ -3,13 +3,13 @@ import os
 from setuptools import find_packages  # type: ignore[import-untyped]
 from setuptools import setup
 
-setupDirectory = os.path.dirname(os.path.realpath(__file__))
+SETUP_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-requirements = []
-with open(os.path.join(setupDirectory, 'requirements.txt'), 'r') as requirementsFile:
-    for requirement in requirementsFile.read().splitlines():
+REQUIREMENTS = []
+with open(os.path.join(SETUP_DIRECTORY, 'requirements.txt'), 'r') as REQUIREMENTS_FILE:
+    for requirement in REQUIREMENTS_FILE.read().splitlines():
         if requirement:
-            requirements.append(requirement)
+            REQUIREMENTS.append(requirement)
 
 setup(
     name='kiba-build',
@@ -18,7 +18,7 @@ setup(
     url='https://github.com/kibalabs/build-py',
     packages=find_packages(exclude=['tests*']),
     python_requires='~=3.7',
-    install_requires=requirements,
+    install_requires=REQUIREMENTS,
     tests_require=[],
     package_data={
         'buildpy': [
