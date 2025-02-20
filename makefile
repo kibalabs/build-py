@@ -11,7 +11,6 @@ lint-check-ci:
 	@ lint-check --new *.py ./buildpy --output-file lint-check-results.json --output-format annotations
 
 lint-fix:
-	# @ isort --sl -l 1000 *.py ./buildpy
 	@ lint-check --new --fix *.py ./buildpy
 
 type-check:
@@ -21,10 +20,10 @@ type-check-ci:
 	@ type-check *.py ./buildpy --output-file type-check-results.json --output-format annotations
 
 security-check:
-	@ security-check *.py ./buildpy
+	@ echo "Use lint-check"
 
 security-check-ci:
-	@ security-check *.py ./buildpy --output-file security-check-results.json --output-format annotations
+	@ echo "Use lint-check-ci"
 
 build:
 	@ echo "Not Supported"
