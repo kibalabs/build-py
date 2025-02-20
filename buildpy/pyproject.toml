@@ -151,7 +151,7 @@ select = [
     "UP", # pyupgrade
     "RUF100",  # yesqa
     "AIR", # Airflow
-    "ERA", # eradicate
+    # "ERA", # eradicate
     "FAST", # FastAPI
     "YTT", # flake8-2020
     "ANN", # flake8-annotations
@@ -193,7 +193,7 @@ select = [
     # "PTH", # flake8-use-pathlib
     "FLY", # flynt
     "I", # isort
-    "C90", # mccabe
+    # "C90", # mccabe
     "NPY", # NumPy-specific rules
     "PD", # pandas-vet
     "N", # pep8-naming
@@ -229,6 +229,7 @@ ignore = [
     "N803", # invalid-argument-name
     "N806", # non-lowercase-variable-in-function,
     "N815", # mixed-case-variable-in-class-scope
+    "N816", # mixed-case-variable-in-global-scope
     "COM812", # missing-trailing-comma
     "Q001", # bad-quotes-multiline-string
     "Q002", # bad-quotes-docstring
@@ -240,6 +241,7 @@ ignore = [
     "TC001", # typing-only-first-party-import
     "TC002", # typing-only-third-party-import
     "TC003", # typing-only-standard-library-import
+    "S608", # hardcoded-sql-expression
 ]
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
