@@ -17,7 +17,7 @@ lint-check-ci:
 
 lint-fix:
 	@ uv run isort --sl -l 1000 ./buildpy
-	@ uv run lint-check --new ./buildpy
+	@ uv run lint-check --new --fix ./buildpy
 
 type-check:
 	@ uv run type-check ./buildpy
