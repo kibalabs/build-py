@@ -164,9 +164,21 @@ ignore = [
 # fixable = ["A", "B", "C", "D", "E", "F", "I"]
 unfixable = []
 per-file-ignores = {}
+line-length = 180
+
+[tool.ruff.pyupgrade]
+keep-runtime-typing = true
+
+[tool.ruff.format]
+quote-style = 'single'
+indent-style = 'space'
+skip-magic-trailing-comma = true
 
 [tool.ruff.lint.isort]
 force-single-line = true
+known-first-party = ['_path_fix']
 
-[tool.isort]
-force-single-line = true
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = 'single'
+inline-quotes = 'single'
+multiline-quotes = 'single'
