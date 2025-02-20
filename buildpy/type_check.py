@@ -47,7 +47,7 @@ class MypyMessageParser(MessageParser):
 @click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
 def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
-    mypyConfigFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
+    mypyConfigFilePath = configFilePath or f'{currentDirectory}/config.toml'
     messages: List[str] = []
     try:
         subprocess.check_output(f'mypy {" ".join(targets)} --config-file {mypyConfigFilePath} --no-color-output --hide-error-context --no-pretty --no-error-summary --show-error-codes --show-column-numbers', stderr=subprocess.STDOUT, shell=True)  # nosec=subprocess_popen_with_shell_equals_true

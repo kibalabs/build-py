@@ -46,7 +46,7 @@ class PylintMessageParser(CollectingReporter, MessageParser):
 @click.option('-c', '--config-file-path', 'configFilePath', required=False, type=str)
 def run(targets: List[str], outputFilename: str, outputFormat: str, configFilePath: str) -> None:
     currentDirectory = os.path.dirname(os.path.realpath(__file__))
-    pylintConfigFilePath = configFilePath or f'{currentDirectory}/pyproject.toml'
+    pylintConfigFilePath = configFilePath or f'{currentDirectory}/config.toml'
     pylintMessageParser = PylintMessageParser()
     run_pylint([f'--rcfile={pylintConfigFilePath}', f'--jobs=0'] + list(targets), reporter=pylintMessageParser, exit=False)
     reporter = GitHubAnnotationsReporter() if outputFormat == 'annotations' else PrettyReporter()

@@ -4,7 +4,7 @@ install:
 
 install-updates:
 	@ pip install uv
-	@ uv sync --all-extras
+	@ uv sync --upgrade --refresh --all-extras
 
 list-outdated: install
 	@ pip list -o

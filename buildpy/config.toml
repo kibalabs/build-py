@@ -73,6 +73,7 @@ disable = [
     "raise-missing-from",
     "unspecified-encoding",
     "superfluous-parens",
+    "too-many-positional-arguments",
 ]
 enable = ["useless-suppression"]
 reports = false
