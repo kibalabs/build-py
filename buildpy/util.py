@@ -2,9 +2,8 @@ import dataclasses
 import json
 import os
 from collections import defaultdict
-from typing import List
 
-from simple_chalk import chalk  # type: ignore
+from simple_chalk import chalk  # type: ignore[import-untyped]
 
 
 @dataclasses.dataclass
@@ -14,24 +13,21 @@ class Message:
     column: int
     code: str
     text: str
-    level: str # (error, warning, notice)
+    level: str  # (error, warning, notice)
 
 
 class MessageParser:
-
-    def parse_messages(self, rawMessages: List[str]) -> List[Message]:
+    def parse_messages(self, rawMessages: list[str]) -> list[Message]:
         raise NotImplementedError
 
 
 class KibaReporter:
-
-    def create_output(self, messages: List[Message]) -> str:
+    def create_output(self, messages: list[Message]) -> str:
         raise NotImplementedError
 
 
 class GitHubAnnotationsReporter(KibaReporter):
-
-    def create_output(self, messages: List[Message]) -> str:
+    def create_output(self, messages: list[Message]) -> str:
         annotations = []
         for message in messages:
             annotation = {
@@ -48,7 +44,6 @@ class GitHubAnnotationsReporter(KibaReporter):
 
 
 class PrettyReporter(KibaReporter):
-
     @staticmethod
     def get_summary(errorCount: int, warningCount: int) -> str:
         summary = ''
@@ -59,14 +54,14 @@ class PrettyReporter(KibaReporter):
             summary += chalk.yellow(f'{warningCount} warnings')
         return summary
 
-    def create_output(self, messages: List[Message]) -> str:
+    def create_output(self, messages: list[Message]) -> str:
         fileMessageMap = defaultdict(list)
         for message in messages:
             fileMessageMap[os.path.relpath(message.path) if message.path else '<unknown>'].append(message)
         totalErrorCount = 0
         totalWarningCount = 0
         outputs = []
-        for (filePath, fileMessages) in fileMessageMap.items():
+        for filePath, fileMessages in fileMessageMap.items():
             fileOutputs = []
             for message in fileMessages:
                 location = chalk.grey(f'{filePath}:{message.line}:{message.column}')

@@ -1,0 +1,259 @@
+[tool.mypy]
+# https://mypy.readthedocs.io/en/latest/config_file.html
+plugins = 'pydantic.mypy'
+follow_imports = 'silent'
+follow_imports_for_stubs = true
+no_silence_site_packages = true
+disallow_any_decorated = true
+disallow_any_explicit = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = true
+warn_unreachable = true
+ignore_errors = false
+allow_untyped_globals = false
+allow_redefinition = false
+implicit_reexport = true
+strict_equality = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.bandit]
+exclude_dirs = ['tests']
+
+[tool.pylint.main]
+# http://pylint.pycqa.org/en/latest/technical_reference/features.html
+extension-pkg-whitelist = ["pydantic", "math", "binascii"]
+disable = [
+    "suppressed-message",
+    "missing-docstring",
+    "locally-disabled",
+    "file-ignored",
+    "fixme",
+    "line-too-long",
+    "len-as-condition",
+    "consider-iterating-dictionary",
+    "logging-fstring-interpolation",
+    "duplicate-code",
+    "f-string-without-interpolation",
+    "raise-missing-from",
+    "unspecified-encoding",
+    "superfluous-parens",
+    "too-many-positional-arguments",
+]
+enable = ["useless-suppression"]
+reports = false
+score = false
+
+[tool.pylint.basic]
+good-names = "_"
+variable-naming-style = "camelCase"
+include-naming-hint = true
+class-attribute-rgx = "^([a-z_][A-Za-z0-9]{1,30}|[A-Z_][A-Z0-9_]{1,30}|(__.*__))$"
+variable-rgx = "^[a-z][a-zA-Z0-9]{1,50}$"
+module-rgx = "^[a-z][a-z0-9_]*$"
+class-rgx = "^[A-Z][a-zA-Z0-9]+$"
+const-rgx = "^(([A-Z_][A-Z0-9_]*)|(__.*__))$"
+attr-rgx = "^[a-z_][a-zA-Z0-9]{1,50}$"
+argument-rgx = "^[a-z][a-zA-Z0-9]{1,30}$"
+inlinevar-rgx = "^[a-z_][A-Za-z0-9]*$"
+method-rgx = "^[a-z_][a-z0-9_]{2,60}$"
+function-rgx = "^[a-z_][a-z0-9_]{2,60}$"
+no-docstring-rgx = ".*"
+docstring-min-length = 0
+
+[tool.pylint.format]
+ignore-long-lines = ".*"
+single-line-if-stmt = false
+single-line-class-stmt = false
+
+[tool.pylint.miscellaneous]
+notes = ["FIXME", "NOTE", "TODO"]
+
+[tool.pylint.similarities]
+min-similarity-lines = 4
+ignore-imports = true
+
+[tool.pylint.design]
+max-args = 100
+max-locals = 100
+max-returns = 100
+max-branches = 100
+max-statements = 100
+max-parents = 100
+max-attributes = 100
+min-public-methods = 0
+max-public-methods = 100
+max-bool-expr = 100
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+target-version = "py313"
+line-length = 260
+
+[tool.ruff.format]
+quote-style = 'single'
+indent-style = 'space'
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+select = [
+    "I", # isort
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "W", # pycodestyle
+    "N", # pep8-naming
+    "B", # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "PGH", # pygrep-hooks
+    "PLC", # pylint
+    "PLE", # pylint
+    "PLR", # pylint
+    "PLW", # pylint
+    "S", # flake8-bandit
+    "SIM", # flake8-simplify
+    "T10", # flake8-debugger
+    "UP", # pyupgrade
+    "RUF100",  # yesqa
+    "AIR", # Airflow
+    "ERA", # eradicate
+    "FAST", # FastAPI
+    "YTT", # flake8-2020
+    "ANN", # flake8-annotations
+    "ASYNC", # flake8-async
+    "S", # flake8-bandit
+    "BLE", # flake8-blind-except
+    # "FBT", # flake8-boolean-trap
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "COM", # flake8-commas
+    "C4", # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "T10", # flake8-debugger
+    "DJ", # flake8-django
+    # "EM", # flake8-errmsg
+    "EXE", # flake8-executable
+    # "FIX", # flake8-fixme
+    "FA", # flake8-future-annotations
+    "INT", # flake8-gettext
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "LOG", # flake8-logging
+    "G", # flake8-logging-format
+    "INP", # flake8-no-pep420
+    "PIE", # flake8-pie
+    "T20", # flake8-print
+    "PYI", # flake8-pyi
+    "PT", # flake8-pytest-style
+    "Q", # flake8-quotes
+    "RSE", # flake8-raise
+    "RET", # flake8-return
+    "SLF", # flake8-self
+    "SIM", # flake8-simplify
+    "SLOT", # flake8-slots
+    "TID", # flake8-tidy-imports
+    "TD", # flake8-todos
+    "TC", # flake8-type-checking
+    "ARG", # flake8-unused-arguments
+    # "PTH", # flake8-use-pathlib
+    "FLY", # flynt
+    "I", # isort
+    "C90", # mccabe
+    "NPY", # NumPy-specific rules
+    "PD", # pandas-vet
+    "N", # pep8-naming
+    "PERF", # Perflint
+    "E", # Error
+    "W", # Warning
+    "F", # Pyflakes
+    "PGH", # pygrep-hooks
+    "PL", # Pylint
+    "PLC", # Convention
+    "PLE", # Error
+    "PLR", # Refactor
+    "PLW", # Warning
+    "UP", # pyupgrade
+    "FURB", # refurb
+    "RUF", # Ruff-specific rules
+    "TRY", # tryceratops
+]
+ignore = [
+    "E501", # line-too-long
+    "F541", # f-string-missing-placeholders
+    "TRY003", # raise-vanilla-args
+    "S105", # hardcoded-password-string
+    "S106", # hardcoded-password-func-arg
+    "S107", # hardcoded-password-default
+    "PLR0911", # too-many-return-statements
+    "PLR0912", # too-many-branches
+    "PLR0913", # too-many-arguments
+    "PLR0915", # too-many-statements
+    "UP006", # deprecated-collection-type"
+    "UP007", # typing-union
+    "B904", # raise-without-from-inside-except
+    "N803", # invalid-argument-name
+    "N806", # non-lowercase-variable-in-function,
+    "N815", # mixed-case-variable-in-class-scope
+    "COM812", # missing-trailing-comma
+    "Q001", # bad-quotes-multiline-string
+    "Q002", # bad-quotes-docstring
+    "ANN401", # any-type - covered by type checking
+    "UP015", # redundant-open-modes
+    "RET504", # unnecessary-assign
+    "TD003", # missing-todo-link
+    "ASYNC109", # async-function-with-timeout
+    "TC001", # typing-only-first-party-import
+    "TC002", # typing-only-third-party-import
+    "TC003", # typing-only-standard-library-import
+]
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+per-file-ignores = {}
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.ruff.lint.isort]
+force-single-line = true
+known-first-party = ['_path_fix']
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = 'single'
+inline-quotes = 'single'
+multiline-quotes = 'single'

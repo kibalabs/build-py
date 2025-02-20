@@ -10,26 +10,20 @@ list-outdated: install
 	@ pip list -o
 
 lint-check:
-	@ uv run lint-check ./buildpy
+	@ uv run lint-check --new ./buildpy
 
 lint-check-ci:
-	@ uv run lint-check ./buildpy --output-file lint-check-results.json --output-format annotations
+	@ uv run lint-check --new ./buildpy --output-file lint-check-results.json --output-format annotations
 
 lint-fix:
 	@ uv run isort --sl -l 1000 ./buildpy
-	@ uv run lint-check ./buildpy
+	@ uv run lint-check --new --fix ./buildpy
 
 type-check:
 	@ uv run type-check ./buildpy
 
 type-check-ci:
 	@ uv run type-check ./buildpy --output-file type-check-results.json --output-format annotations
-
-security-check:
-	@ uv run security-check ./buildpy
-
-security-check-ci:
-	@ uv run security-check ./buildpy --output-file security-check-results.json --output-format annotations
 
 build:
 	@ uv build
@@ -41,6 +35,9 @@ start-prod:
 	@ echo "Not Supported"
 
 test:
+	@ echo "Not Supported"
+
+test-ci:
 	@ echo "Not Supported"
 
 clean:
