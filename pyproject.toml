@@ -16,6 +16,9 @@ dependencies = [
     "wheel~=0.45.1",
 ]
 
+[project.urls]
+repository = "https://github.com/kibalabs/build-py"
+
 [project.scripts]
 lint-check = "buildpy.lint_check:run"
 type-check = "buildpy.type_check:run"
