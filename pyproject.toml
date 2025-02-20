@@ -30,8 +30,11 @@ version = "buildpy.version:run"
 package = true
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "wheel", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 include-package-data = true
+
+[tool.setuptools.package-data]
+core = ["/py.typed", "**/config.toml"]
