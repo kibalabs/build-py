@@ -14,7 +14,6 @@ def generate_command(part: str) -> str:
 @click.option('-p', '--part', 'part', required=True, type=str)
 @click.option('-c', '--count', 'count', required=False, type=int, default=1)
 def run(part: str, count: int) -> None:
-    print('here', part, count)
     if count == 0:
         print('No version bump required')
         return
