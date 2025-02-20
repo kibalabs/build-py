@@ -1,11 +1,13 @@
-import importlib.metadata
 import subprocess
+import tomllib
 
 import click
 
 
 def generate_command(part: str) -> str:
-    currentVersion = importlib.metadata.version('kiba-build')
+    with open('pyproject.toml', 'r') as file:
+        pyproject = tomllib.loads(file.read())
+    currentVersion = pyproject['project']['version']
     return f"bump-my-version bump --allow-dirty --current-version \"{currentVersion}\" --parse '(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(\\.dev(?P<dev>\\d+))?' --serialize '{{major}}.{{minor}}.{{patch}}.dev{{dev}}' --serialize '{{major}}.{{minor}}.{{patch}}' {part} pyproject.toml"
 
 @click.command()

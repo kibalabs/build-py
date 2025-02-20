@@ -49,11 +49,11 @@ clean:
 publish: build
 	@ uv publish
 
-GIT_COUNT=$(shell git rev-list $(git describe --tags --abbrev=0)..HEAD --count)
-# publish-dev: build
+GIT_LAST_TAG=$(shell git describe --tags --abbrev=0)
+GIT_COUNT=$(shell git rev-list $(GIT_LAST_TAG)..HEAD --count)
 publish-dev:
-	echo $(GIT_COUNT)
-	uv run buildpy/version.py --part dev --count $(GIT_COUNT)
-# @ uv publish
+	@ uv run buildpy/version.py --part dev --count $(GIT_COUNT)
+	@ uv build
+	@ uv publish
 
 .PHONY: *
