@@ -10,5 +10,3 @@ COPY uv.lock .
 RUN make install
 
 COPY . .
-RUN make install
-RUN make build

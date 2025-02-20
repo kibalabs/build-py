@@ -1,35 +1,35 @@
 install:
 	@ pip install uv
-	@ uv sync
+	@ uv sync --all-extras
 
 install-updates:
 	@ pip install uv
-	@ uv sync
+	@ uv sync --all-extras
 
 list-outdated: install
 	@ pip list -o
 
 lint-check:
-	@ lint-check ./buildpy
+	@ uv run lint-check ./buildpy
 
 lint-check-ci:
-	@ lint-check ./buildpy --output-file lint-check-results.json --output-format annotations
+	@ uv run lint-check ./buildpy --output-file lint-check-results.json --output-format annotations
 
 lint-fix:
-	@ isort --sl -l 1000 ./buildpy
-	@ lint-check ./buildpy
+	@ uv run isort --sl -l 1000 ./buildpy
+	@ uv run lint-check ./buildpy
 
 type-check:
-	@ type-check ./buildpy
+	@ uv run type-check ./buildpy
 
 type-check-ci:
-	@ type-check ./buildpy --output-file type-check-results.json --output-format annotations
+	@ uv run type-check ./buildpy --output-file type-check-results.json --output-format annotations
 
 security-check:
-	@ security-check ./buildpy
+	@ uv run security-check ./buildpy
 
 security-check-ci:
-	@ security-check ./buildpy --output-file security-check-results.json --output-format annotations
+	@ uv run security-check ./buildpy --output-file security-check-results.json --output-format annotations
 
 build:
 	@ uv build
