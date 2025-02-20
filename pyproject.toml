@@ -32,7 +32,10 @@ package = true
 
 [build-system]
 requires = ["setuptools"]
-build-backend = "build"
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
 
 [tool.setuptools.package-data]
-core = ["py.typed", "**/config.toml"]
+core = ["py.typed", "./config.toml"]
