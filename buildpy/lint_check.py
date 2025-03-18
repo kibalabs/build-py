@@ -76,7 +76,9 @@ def run(targets: list[str], outputFilename: str, outputFormat: str, configFilePa
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # noqa: S602
         except subprocess.CalledProcessError as exception:
-            rawMessages = json.loads(exception.output.decode())
+            output = exception.output.decode()
+            cleanedOutput = '\n'.join([line for line in output.split('\n') if not line.startswith('warning:')])
+            rawMessages = json.loads(cleanedOutput)
         ruffMessageParser = RuffMessageParser()
         messages += ruffMessageParser.parse_json_messages(rawMessages=rawMessages)
         command2 = f'ruff format {"--check" if not shouldFix else ""} --config {configFilePath} {" ".join(targets)}'
