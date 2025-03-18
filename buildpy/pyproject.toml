@@ -242,6 +242,7 @@ ignore = [
     "TC002", # typing-only-third-party-import
     "TC003", # typing-only-standard-library-import
     "S608", # hardcoded-sql-expression
+    "TC006", # runtime-cast-value
 ]
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
