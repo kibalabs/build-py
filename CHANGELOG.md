@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [MAJOR] Changed version script to use new library
 - [MAJOR] Moved all config into pyproject.toml
 - [MINOR] Added ruff linting (with --new flag)
+- [MINOR] Added pytest running with test-check
 
 ### Changed
 
