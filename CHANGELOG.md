@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [MAJOR] Moved all config into pyproject.toml
 - [MINOR] Added ruff linting (with --new flag)
 - [MINOR] Added pytest running with test-check
+- [MINOR] Remove pylint completely
+- [MAJOR] Switch type checking to ty by default
 
 ### Changed
 
