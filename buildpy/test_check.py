@@ -58,4 +58,4 @@ def run(targets: list[str], outputFilename: str, outputFormat: str) -> None:
 
 
 if __name__ == '__main__':
-    run()  # pylint: disable=no-value-for-parameter
+    run()

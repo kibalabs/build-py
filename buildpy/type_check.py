@@ -80,7 +80,8 @@ def run(targets: list[str], outputFilename: str, outputFormat: str, configFilePa
         messageParser: MessageParser = MypyMessageParser()
         parsedMessages = messageParser.parse_messages(rawMessages=messages)
     else:
-        command = f'ty check --output-format concise {" ".join(targets)}'
+        configFileArg = f'--config-file {configFilePath}' if configFilePath else ''
+        command = f'ty check --output-format concise {configFileArg} {" ".join(targets)}'
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # noqa: S602
         except subprocess.CalledProcessError as exception:
