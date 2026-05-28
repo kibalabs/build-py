@@ -16,7 +16,6 @@ lint-check-ci:
 	@ uv run lint-check ./buildpy --output-file lint-check-results.json --output-format annotations
 
 lint-fix:
-	@ uv run isort --sl -l 1000 ./buildpy
 	@ uv run lint-check --fix ./buildpy
 
 type-check:

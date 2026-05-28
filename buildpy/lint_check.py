@@ -40,11 +40,9 @@ def run(targets: list[str], outputFilename: str, outputFormat: str, configFilePa
     rawMessages = []
     command = f'ruff check --output-format json --config {configFilePath} {"--fix" if shouldFix else ""} {" ".join(targets)}'
     try:
-        subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)  # noqa: S602
+        subprocess.check_output(command, stderr=subprocess.DEVNULL, shell=True)  # noqa: S602
     except subprocess.CalledProcessError as exception:
-        output = exception.output.decode()
-        cleanedOutput = '\n'.join([line for line in output.split('\n') if not line.startswith('warning:')])
-        rawMessages = json.loads(cleanedOutput)
+        rawMessages = json.loads(exception.output.decode())
     ruffMessageParser = RuffMessageParser()
     messages += ruffMessageParser.parse_json_messages(rawMessages=rawMessages)
     command2 = f'ruff format {"--check" if not shouldFix else ""} --config {configFilePath} {" ".join(targets)}'
