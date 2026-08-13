@@ -158,6 +158,7 @@ ignore = [
     "PLR0912", # too-many-branches
     "PLR0913", # too-many-arguments
     "PLR0915", # too-many-statements
+    "PLR0917", # too-many-positional-arguments
     "UP006", # deprecated-collection-type"
     "UP007", # typing-union
     "B904", # raise-without-from-inside-except
