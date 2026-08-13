@@ -619,7 +619,7 @@ requires-dist = [
     { name = "ruff", specifier = "~=0.16.3" },
     { name = "simple-chalk", specifier = "~=0.1.0" },
     { name = "twine", specifier = "~=7.0.0" },
-    { name = "ty", specifier = "~=0.0.39" },
+    { name = "ty", specifier = "~=0.0.71" },
     { name = "wheel", specifier = "~=0.48.0" },
 ]
 
