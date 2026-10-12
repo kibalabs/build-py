@@ -192,6 +192,10 @@ keep-runtime-typing = true
 force-single-line = true
 known-first-party = ['_path_fix']
 
+[tool.ruff.lint.flake8-import-conventions]
+# Ruff defaults without "datetime" = "dt" (added in 0.17) so `import datetime` stays allowed
+aliases = { "altair" = "alt", "matplotlib" = "mpl", "matplotlib.pyplot" = "plt", "numpy" = "np", "numpy.typing" = "npt", "pandas" = "pd", "seaborn" = "sns", "tensorflow" = "tf", "tkinter" = "tk", "holoviews" = "hv", "panel" = "pn", "plotly.express" = "px", "polars" = "pl", "pyarrow" = "pa", "xml.etree.ElementTree" = "ET" }
+
 [tool.ruff.lint.flake8-quotes]
 docstring-quotes = 'single'
 inline-quotes = 'single'
