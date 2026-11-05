@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ## [Unreleased]
 
 ### Added
+- [MINOR] Added `publish-dev`, which publishes a dev version (`X.Y.(Z+1).devN`, where N is the commits since the `vX.Y.Z` tag) with `uv build` and `uv publish`, and skips when the current version isn't tagged yet (a version bump waiting for its release) or when the tag is the current commit
 - [MAJOR] Changed version script to use new library
 - [MAJOR] Moved all config into pyproject.toml
 - [MINOR] Added ruff linting (with --new flag)

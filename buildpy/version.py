@@ -12,10 +12,7 @@ def generate_command(part: str, configFilePath: str) -> str:
     return f"bump-my-version bump --config-file \"{configFilePath}\" --allow-dirty --current-version \"{currentVersion}\" --parse '(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(\\.dev(?P<dev>\\d+))?' --serialize '{{major}}.{{minor}}.{{patch}}.dev{{dev}}' --serialize '{{major}}.{{minor}}.{{patch}}' {part} pyproject.toml"
 
 
-@click.command()
-@click.option('-p', '--part', 'part', required=True, type=str)
-@click.option('-c', '--count', 'count', required=False, type=int, default=1)
-def run(part: str, count: int) -> None:
+def bump_version(part: str, count: int) -> None:
     if count == 0:
         print('No version bump required')  # noqa: T201
         return
@@ -28,6 +25,13 @@ def run(part: str, count: int) -> None:
             subprocess.check_output(generate_command(part='patch', configFilePath=configFile.name), stderr=subprocess.STDOUT, shell=True)  # noqa: S602
         for _ in range(count):
             subprocess.check_output(generate_command(part=part, configFilePath=configFile.name), stderr=subprocess.STDOUT, shell=True)  # noqa: S602
+
+
+@click.command()
+@click.option('-p', '--part', 'part', required=True, type=str)
+@click.option('-c', '--count', 'count', required=False, type=int, default=1)
+def run(part: str, count: int) -> None:
+    bump_version(part=part, count=count)
 
 
 if __name__ == '__main__':
