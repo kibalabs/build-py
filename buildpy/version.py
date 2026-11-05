@@ -9,7 +9,8 @@ def generate_command(part: str, configFilePath: str) -> str:
     with open('pyproject.toml') as file:
         pyproject = tomllib.loads(file.read())
     currentVersion = pyproject['project']['version']
-    return f"bump-my-version bump --config-file \"{configFilePath}\" --allow-dirty --current-version \"{currentVersion}\" --parse '(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(\\.dev(?P<dev>\\d+))?' --serialize '{{major}}.{{minor}}.{{patch}}.dev{{dev}}' --serialize '{{major}}.{{minor}}.{{patch}}' {part} pyproject.toml"
+    # NOTE(krishan711): only replace the version line, otherwise pins containing the version string (e.g. 0.1.1 inside ==0.1.11.dev23) get rewritten too
+    return f"bump-my-version bump --config-file \"{configFilePath}\" --allow-dirty --current-version \"{currentVersion}\" --search 'version = \"{{current_version}}\"' --replace 'version = \"{{new_version}}\"' --parse '(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(\\.dev(?P<dev>\\d+))?' --serialize '{{major}}.{{minor}}.{{patch}}.dev{{dev}}' --serialize '{{major}}.{{minor}}.{{patch}}' {part} pyproject.toml"
 
 
 def bump_version(part: str, count: int) -> None:
