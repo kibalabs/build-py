@@ -24,6 +24,19 @@ def run(targets: list[str], outputFilename: str, outputFormat: str) -> None:
     os.remove(pytestOutputFilename)
     # print(json.dumps(output))
     # summary = output['summary']
+    for collector in output['collectors']:
+        if collector['outcome'] == 'failed':
+            longrepr = collector.get('longrepr', '').strip()
+            parsedMessages.append(
+                Message(
+                    path=collector['nodeid'].split('::')[0],
+                    line=0,
+                    column=0,
+                    code='collection-error',
+                    text=longrepr.splitlines()[-1] if longrepr else 'Collection failed',
+                    level='error',
+                ),
+            )
     tests = output['tests']
     for test in tests:
         isFailed = test['outcome'] != 'passed'
