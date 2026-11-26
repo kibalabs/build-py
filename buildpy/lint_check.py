@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+import sys
 from typing import Any
 
 import click
@@ -9,6 +10,7 @@ from buildpy.util import GitHubAnnotationsReporter
 from buildpy.util import Message
 from buildpy.util import MessageParser
 from buildpy.util import PrettyReporter
+from buildpy.util import is_failing
 
 
 class RuffMessageParser(MessageParser):
@@ -69,6 +71,8 @@ def run(targets: list[str], outputFilename: str, outputFormat: str, configFilePa
             outputFile.write(output)
     else:
         print(output)  # noqa: T201
+    if is_failing(messages=messages):
+        sys.exit(1)
 
 
 if __name__ == '__main__':

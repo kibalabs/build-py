@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [PATCH] Fixed version script appending a second dev part with bump-my-version 1.6.7
 - [PATCH] Fixed `version` and `publish-dev` rewriting other values in pyproject.toml that contain the current version (for example the 0.1.1 inside a `kiba-build==0.1.11.dev23` pin): only the `version = "..."` line changes
 - [PATCH] Fixed `test-check` reporting success when test files fail to import: collection errors are now reported as errors
+- [MAJOR] `lint-check`, `type-check`, `security-check` and `test-check` exit with code 1 when they report any error or warning (what their output already calls "Failed"), so CI fails on them. They used to always exit 0, which left checks green that only reported errors as annotations
 
 ### Removed
 

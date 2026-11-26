@@ -16,6 +16,10 @@ class Message:
     level: str  # (error, warning, notice)
 
 
+def is_failing(messages: list[Message]) -> bool:
+    return any(message.level in ('error', 'warning') for message in messages)
+
+
 class MessageParser:
     def parse_messages(self, rawMessages: list[str]) -> list[Message]:
         raise NotImplementedError

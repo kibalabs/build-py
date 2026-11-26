@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 import click
 import pytest
@@ -7,6 +8,7 @@ import pytest
 from buildpy.util import GitHubAnnotationsReporter
 from buildpy.util import Message
 from buildpy.util import PrettyReporter
+from buildpy.util import is_failing
 
 
 @click.command()
@@ -68,6 +70,8 @@ def run(targets: list[str], outputFilename: str, outputFormat: str) -> None:
             outputFile.write(output)
     else:
         print(output)  # noqa: T201
+    if is_failing(messages=parsedMessages):
+        sys.exit(1)
 
 
 if __name__ == '__main__':
