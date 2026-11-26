@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - [PATCH] Fixed `version` and `publish-dev` rewriting other values in pyproject.toml that contain the current version (for example the 0.1.1 inside a `kiba-build==0.1.11.dev23` pin): only the `version = "..."` line changes
 - [PATCH] Fixed `test-check` reporting success when test files fail to import: collection errors are now reported as errors
 - [MINOR] `lint-check`, `type-check`, `security-check` and `test-check` exit with code 1 when they print a report with any error or warning (what the report already calls "Failed"), so `make` chains stop on them. With `--output-file` they still exit 0 and leave the status to whatever reads the annotations
+- [PATCH] Fixed `type-check --mypy` misreading errors whose message contains `: ` (like mypy's `comparison-overlap`): the level took in part of the message, so the pretty report said "Passed." while the annotations reported a failure
 
 ### Removed
 
