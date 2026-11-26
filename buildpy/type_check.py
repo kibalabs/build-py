@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+import sys
 
 import click
 
@@ -8,6 +9,7 @@ from buildpy.util import GitHubAnnotationsReporter
 from buildpy.util import Message
 from buildpy.util import MessageParser
 from buildpy.util import PrettyReporter
+from buildpy.util import is_failing
 
 
 class TyMessageParser(MessageParser):
@@ -95,6 +97,8 @@ def run(targets: list[str], outputFilename: str, outputFormat: str, configFilePa
             outputFile.write(output)
     else:
         print(output)  # noqa: T201
+        if is_failing(messages=parsedMessages):
+            sys.exit(1)
 
 
 if __name__ == '__main__':
