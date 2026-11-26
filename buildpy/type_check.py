@@ -45,11 +45,11 @@ class MypyMessageParser(MessageParser):
             if 'Error importing plugin "pydantic.mypy":' in rawMessage:
                 # NOTE(krishan711): we use pydantic rules but it may not be installed (like in this repo)
                 continue
-            match1 = re.match(r'(.*):(\d*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
+            match1 = re.match(r'(.+?):(\d+):(\d+): (error|warning): (.*?)\s+\[([\w-]+)\]$', rawMessage)
             match2 = None
             if not match1:
                 # match2 = match1 without column number
-                match2 = re.match(r'(.*):(\d*): (.*): (.*) \[(.*)\]', rawMessage)
+                match2 = re.match(r'(.+?):(\d+): (error|warning): (.*?)\s+\[([\w-]+)\]$', rawMessage)
             output.append(
                 Message(
                     path=match1.group(1) if match1 else (match2.group(1) if match2 else ''),
