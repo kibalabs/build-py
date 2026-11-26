@@ -16,6 +16,7 @@ class Message:
     level: str  # (error, warning, notice)
 
 
+# NOTE(krishan711): only local runs exit with this; runs that write an --output-file leave the status to whatever reads the annotations, so CI steps after them still run
 def is_failing(messages: list[Message]) -> bool:
     return any(message.level in ('error', 'warning') for message in messages)
 

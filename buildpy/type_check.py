@@ -97,8 +97,8 @@ def run(targets: list[str], outputFilename: str, outputFormat: str, configFilePa
             outputFile.write(output)
     else:
         print(output)  # noqa: T201
-    if is_failing(messages=parsedMessages):
-        sys.exit(1)
+        if is_failing(messages=parsedMessages):
+            sys.exit(1)
 
 
 if __name__ == '__main__':
